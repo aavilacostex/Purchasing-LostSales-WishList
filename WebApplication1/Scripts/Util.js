@@ -1,5 +1,5 @@
-﻿//Cambia los Datepickers al English
-$(function ($) {
+//Cambia los Datepickers al English
+$(function ($) { 
     $.datepicker.regional['en'] = {
         closeText: 'Close',
         prevText: '<Prev',
