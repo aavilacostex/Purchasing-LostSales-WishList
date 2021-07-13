@@ -1,0 +1,12 @@
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\bin\Debug\CTPWEB.UTIL.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\bin\Debug\CTPWEB.UTIL.pdb
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\bin\Debug\CTPWEB.UTIL.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\bin\Debug\IBM.Data.DB2.iSeries.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\bin\Debug\IBM.Data.DB2.iSeries.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.Resources.resources
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.vbproj.GenerateResource.cache
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.vbproj.CoreCompileInputs.cache
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.vbproj.CopyComplete
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Debug\CTPWEB.UTIL.pdb

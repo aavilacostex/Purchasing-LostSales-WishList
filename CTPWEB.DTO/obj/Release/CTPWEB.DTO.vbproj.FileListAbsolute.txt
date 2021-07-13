@@ -1,0 +1,16 @@
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\CTPWEB.DTO.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\CTPWEB.DTO.pdb
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\CTPWEB.DTO.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\CTPWEB.UTIL.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\IBM.Data.DB2.iSeries.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\CTPWEB.UTIL.pdb
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\CTPWEB.UTIL.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\bin\Release\IBM.Data.DB2.iSeries.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.vbprojAssemblyReference.cache
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.Resources.resources
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.vbproj.GenerateResource.cache
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.vbproj.CoreCompileInputs.cache
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.vbproj.CopyComplete
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.dll
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.xml
+C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.DTO\obj\Release\CTPWEB.DTO.pdb
