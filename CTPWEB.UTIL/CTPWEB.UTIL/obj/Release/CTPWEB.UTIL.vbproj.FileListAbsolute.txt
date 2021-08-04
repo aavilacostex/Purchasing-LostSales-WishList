@@ -11,3 +11,15 @@ C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Releas
 C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.dll
 C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.xml
 C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.pdb
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\bin\Release\CTPWEB.UTIL.dll
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\bin\Release\CTPWEB.UTIL.pdb
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\bin\Release\CTPWEB.UTIL.xml
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\bin\Release\IBM.Data.DB2.iSeries.dll
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\bin\Release\IBM.Data.DB2.iSeries.xml
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.Resources.resources
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.vbproj.GenerateResource.cache
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.vbproj.CoreCompileInputs.cache
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.vbproj.CopyComplete
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.dll
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.xml
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.pdb

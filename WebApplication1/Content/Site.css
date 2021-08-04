@@ -640,6 +640,46 @@ table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
     padding: 5px !important;
 }
 
+.input-group-addon {
+    padding: 1px 4px 1px 8px !important;
+    background-color: #fbba42 !important;
+    border-radius: 0 5px 5px 0;
+}
+
+.input-group-addon > i {
+    padding-right: 10px !important;
+}
+
+
+#dvMessageLog {
+    color: red;
+    font-weight: 600;
+    font-size: 12px;
+    margin: 0 auto !important;
+}
+
+#MainContent_lblOptionalMessage {
+    color: red !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    margin: 0 auto !important;
+}
+
+#dvMessageLog .col-md-8 {
+    text-align: center !important;
+}
+
+#MainContent_lblUserLogged {
+    font-size: 11px !important;
+    font-weight: 600;
+}
+
+#MainContent_lnkLogout {
+    font-size: 11px !important;
+    font-weight: 600;
+    text-decoration: none;
+}
+
 #MainContent_txtDateInit {
     width: 85% !important;
 }
@@ -1304,7 +1344,7 @@ input[type="color"]:focus,
     font-size: 14px;
 }
 
-#spnLoadExcel, #spnAddFile, #spnAddFile2, #spnAddFile3, #spnUpdatePart, #spnUpdatePart2, #spnProdDev1, #spnProdDev2, #spnProdDev3, #spnClaimDetails {
+#spnLoadExcel, #spnAddFile, #spnAddFile2, #spnAddFile3, #spnUpdatePart, #spnUpdatePart2, #spnProdDev1, #spnProdDev2, #spnProdDev3, #spnClaimDetails, #spnLoadText {
     text-transform: uppercase;
     color: black;
     font-size: 22px;
@@ -1315,7 +1355,7 @@ input[type="color"]:focus,
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-#pnLoadFile, #pnAddPartManual, #pnAddPartManual2, #pnAddPartManual3, #pnUpdatePart, #pnDisplayImage, #pnUpdatePart2, #pnDisplayImage2, #pnProdDev1, #pnProdDev2, #pnClaimDetails {
+#pnLoadFile, #pnAddPartManual, #pnAddPartManual2, #pnAddPartManual3, #pnUpdatePart, #pnDisplayImage, #pnUpdatePart2, #pnDisplayImage2, #pnProdDev1, #pnProdDev2, #pnClaimDetails, #pdDisplayLogin {
     padding-bottom: 20px;
     margin: 25px 0;
 }
@@ -1360,7 +1400,7 @@ input[type="color"]:focus,
 }
 
 .hideProp {
-    display: none;
+    display: none !important;
 }
 
 .label-style {

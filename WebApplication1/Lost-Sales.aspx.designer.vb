@@ -23,6 +23,24 @@ Partial Public Class Lost_Sales
     Protected WithEvents updatepnl1 As Global.System.Web.UI.UpdatePanel
 
     '''<summary>
+    '''lblUserLogged control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblUserLogged As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lnkLogout control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkLogout As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
     '''rowFilters control.
     '''</summary>
     '''<remarks>
@@ -633,6 +651,15 @@ Partial Public Class Lost_Sales
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents hdUserAssigment As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''hdWelcomeMess control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hdWelcomeMess As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''grvLostSales control.

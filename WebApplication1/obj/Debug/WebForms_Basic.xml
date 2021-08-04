@@ -37,9 +37,90 @@ WebApplication1
  Returns the Asp log object.
  </summary>
 </member>
+<member name="F:WebApplication1.Login._lblOptionalMessage">
+<summary>
+lblOptionalMessage control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Login._UserName">
+<summary>
+UserName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Login._frUserLogin">
+<summary>
+frUserLogin control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Login._Password">
+<summary>
+Password control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Login._rfPassword">
+<summary>
+rfPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Login._btnLoginUser">
+<summary>
+btnLoginUser control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Login._hdSessionExpired">
+<summary>
+hdSessionExpired control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.Lost_Sales._updatepnl1">
 <summary>
 updatepnl1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._lblUserLogged">
+<summary>
+lblUserLogged control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._lnkLogout">
+<summary>
+lnkLogout control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -658,6 +739,15 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.Lost_Sales._hdWelcomeMess">
+<summary>
+hdWelcomeMess control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.Lost_Sales._grvLostSales">
 <summary>
 grvLostSales control.
@@ -688,6 +778,33 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.AutoComplete._form1">
 <summary>
 form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1._Default._hdWelcomeMess">
+<summary>
+hdWelcomeMess control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1._Default._lblUserLogged">
+<summary>
+lblUserLogged control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1._Default._lnkLogout">
+<summary>
+lnkLogout control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -3286,6 +3403,15 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.SiteMaster._lnkLogout">
+<summary>
+lnkLogout control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.SiteMaster._MainContent">
 <summary>
 MainContent control.
@@ -3316,6 +3442,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.SiteMaster._ventanaModal">
 <summary>
 ventanaModal control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.SiteMaster._hdShowMenu">
+<summary>
+hdShowMenu control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -3379,6 +3514,24 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._updatepnl">
 <summary>
 updatepnl control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblUserLogged">
+<summary>
+lblUserLogged control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lnkLogout">
+<summary>
+lnkLogout control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -5440,6 +5593,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._hdDifVnd">
 <summary>
 hdDifVnd control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdWelcomeMess">
+<summary>
+hdWelcomeMess control.
 </summary>
 <remarks>
 Auto-generated field.

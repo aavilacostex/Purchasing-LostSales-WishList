@@ -11,68 +11,68 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class SiteMaster
+Partial Public Class Login
 
     '''<summary>
-    '''lblUsername control.
+    '''lblOptionalMessage control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblUsername As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblOptionalMessage As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''lnkLogout control.
+    '''UserName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lnkLogout As Global.System.Web.UI.WebControls.LinkButton
+    Protected WithEvents UserName As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''MainContent control.
+    '''frUserLogin control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents MainContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
+    Protected WithEvents frUserLogin As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''panelUpdateProgress control.
+    '''Password control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents panelUpdateProgress As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents Password As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''UpdateProgress1 control.
+    '''rfPassword control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents UpdateProgress1 As Global.System.Web.UI.UpdateProgress
+    Protected WithEvents rfPassword As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''ventanaModal control.
+    '''btnLoginUser control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ventanaModal As Global.AjaxControlToolkit.ModalPopupExtender
+    Protected WithEvents btnLoginUser As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''hdShowMenu control.
+    '''hdSessionExpired control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hdShowMenu As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents hdSessionExpired As Global.System.Web.UI.WebControls.HiddenField
 End Class

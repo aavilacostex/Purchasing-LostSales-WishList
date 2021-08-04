@@ -85,6 +85,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
@@ -178,6 +179,7 @@
     <Content Include="Images\minus.gif" />
     <Content Include="Images\plus.gif" />
     <Content Include="Images\wait1.gif" />
+    <Content Include="Login.aspx" />
     <Content Include="Lost-Sales.aspx" />
     <Content Include="Modules\AutoComplete.aspx" />
     <Content Include="AutoCompleteService.asmx" />
@@ -348,6 +350,13 @@
     </Compile>
     <Compile Include="KeepAlive.ashx.vb">
       <DependentUpon>KeepAlive.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.designer.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Lost-Sales.aspx.designer.vb">
       <DependentUpon>Lost-Sales.aspx</DependentUpon>

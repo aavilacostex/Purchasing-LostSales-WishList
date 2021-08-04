@@ -15,7 +15,17 @@
         <ContentTemplate>
             <script>
                 //Sys.Application.add_load(jScript);
-            </script>            
+            </script>  
+            
+            <div class="row">
+                <div class="col-md-9"></div>
+                <div class="col-md-2">
+                    <asp:Label ID="lblUserLogged" Text="" runat="server"></asp:Label>
+                </div>
+                <div class="col-md-1">
+                    <asp:LinkButton ID="lnkLogout" Text="Click to Logout." OnClick="lnkLogout_Click" runat="server"></asp:LinkButton>
+                </div>
+            </div>
 
             <div class="container-fluid">
                 <div class="breadcrumb-area breadcrumb-bg">
@@ -1041,6 +1051,8 @@
                 <asp:HiddenField ID="hdExistProj" value="0" runat="server" />
 
                 <asp:HiddenField ID="hdDifVnd" value="" runat="server" />
+
+                <asp:HiddenField id="hdWelcomeMess" Value="" runat="server" />
             </div>
 
             <div class="row" style="display: none !important;">
@@ -2314,7 +2326,13 @@
                fixFooterColumns();
 
                //$('.footer-style').children("td:contains(' ')").addClass('hidecol');
+
+               var hdWelcome = document.getElementById('<%=hdWelcomeMess.ClientID%>').value
+               $('#<%=lblUserLogged.ClientID %>').val(hdWelcome); 
             }
+
+            var hdWelcome = document.getElementById('<%=hdWelcomeMess.ClientID%>').value
+            $('#<%=lblUserLogged.ClientID %>').val(hdWelcome); 
 
             var hd2 = document.getElementById('<%=hiddenId2.ClientID%>').value;
             var hd4 = document.getElementById('<%=hiddenId4.ClientID%>').value;

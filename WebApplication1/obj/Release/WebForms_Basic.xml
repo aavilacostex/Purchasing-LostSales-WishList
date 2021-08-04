@@ -46,6 +46,24 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.Lost_Sales._rowFilters">
+<summary>
+rowFilters control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._pnDefValues">
+<summary>
+pnDefValues control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.Lost_Sales._lblItemsCount">
 <summary>
 lblItemsCount control.
@@ -58,6 +76,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Lost_Sales._lblTimesQuote">
 <summary>
 lblTimesQuote control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._pnFilters">
+<summary>
+pnFilters control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -154,6 +181,15 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.Lost_Sales._pnExtraFilters">
+<summary>
+pnExtraFilters control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.Lost_Sales._rdCategory">
 <summary>
 rdCategory control.
@@ -193,6 +229,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Lost_Sales._rdLast12">
 <summary>
 rdLast12 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._pnFilterCriteria">
+<summary>
+pnFilterCriteria control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -244,9 +289,72 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:WebApplication1.Lost_Sales._updatepnl2">
+<member name="F:WebApplication1.Lost_Sales._addPerPech">
 <summary>
-updatepnl2 control.
+addPerPech control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._lblSelectedPart">
+<summary>
+lblSelectedPart control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._lblDescription">
+<summary>
+lblDescription control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._lblUser2">
+<summary>
+lblUser2 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._ddlUser2">
+<summary>
+ddlUser2 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._btnUpdate3">
+<summary>
+btnUpdate3 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._btnBack3">
+<summary>
+btnBack3 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._Image1">
+<summary>
+Image1 control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -526,6 +634,24 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Lost_Sales._selectedFilter">
 <summary>
 selectedFilter control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._hdShowUserAssignment">
+<summary>
+hdShowUserAssignment control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._hdUserAssigment">
+<summary>
+hdUserAssigment control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -3151,6 +3277,24 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.SiteMaster._lblUsername">
+<summary>
+lblUsername control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.SiteMaster._lnkLogout">
+<summary>
+lnkLogout control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.SiteMaster._MainContent">
 <summary>
 MainContent control.
@@ -3271,6 +3415,123 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._btnImportFromLs">
 <summary>
 btnImportFromLs control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._showActionsSection">
+<summary>
+showActionsSection control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rowFilters">
+<summary>
+rowFilters control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._pnDefValues">
+<summary>
+pnDefValues control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._btnWlTemplate">
+<summary>
+btnWlTemplate control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._btnUpdate">
+<summary>
+btnUpdate control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._pnFilters">
+<summary>
+pnFilters control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdStatus">
+<summary>
+rdStatus control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdFrom">
+<summary>
+rdFrom control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdAssigment">
+<summary>
+rdAssigment control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._pnFilterCriteria">
+<summary>
+pnFilterCriteria control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._ddlStatus">
+<summary>
+ddlStatus control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._ddlFrom">
+<summary>
+ddlFrom control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._ddlAssign">
+<summary>
+ddlAssign control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -4015,6 +4276,15 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.Wish_List._topFields">
+<summary>
+topFields control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.Wish_List._lblPartNoPD">
 <summary>
 lblPartNoPD control.
@@ -4063,6 +4333,33 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._txtDescriptionPD1">
 <summary>
 txtDescriptionPD1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdNewProject">
+<summary>
+rdNewProject control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdExistingProject">
+<summary>
+rdExistingProject control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._dvNewProject">
+<summary>
+dvNewProject control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -4153,6 +4450,222 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._txtProjectDevDescription">
 <summary>
 txtProjectDevDescription control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._dvExistingProject">
+<summary>
+dvExistingProject control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblSearchBy">
+<summary>
+lblSearchBy control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdSearchByNo">
+<summary>
+rdSearchByNo control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdSearchByName">
+<summary>
+rdSearchByName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblSearchValue">
+<summary>
+lblSearchValue control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._txtSearchValue">
+<summary>
+txtSearchValue control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lnkSearchValue">
+<summary>
+lnkSearchValue control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._Span33">
+<summary>
+Span33 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._dvVndValidation">
+<summary>
+dvVndValidation control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjNumber">
+<summary>
+lblProjNumber control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjectNumber">
+<summary>
+lblProjectNumber control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._spnMessage">
+<summary>
+spnMessage control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjVendors">
+<summary>
+lblProjVendors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._liProjVendors">
+<summary>
+liProjVendors control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._Label1">
+<summary>
+Label1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._Label3">
+<summary>
+Label3 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._Label4">
+<summary>
+Label4 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._Label5">
+<summary>
+Label5 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._Label6">
+<summary>
+Label6 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjName">
+<summary>
+lblProjName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjCreationDate">
+<summary>
+lblProjCreationDate control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjStatus">
+<summary>
+lblProjStatus control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjUser">
+<summary>
+lblProjUser control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._lblProjInfo">
+<summary>
+lblProjInfo control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -4387,87 +4900,6 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._txtCommentsPD">
 <summary>
 txtCommentsPD control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._showActionsSection">
-<summary>
-showActionsSection control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._btnWlTemplate">
-<summary>
-btnWlTemplate control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._btnUpdate">
-<summary>
-btnUpdate control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._rdStatus">
-<summary>
-rdStatus control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._rdFrom">
-<summary>
-rdFrom control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._rdAssigment">
-<summary>
-rdAssigment control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._ddlStatus">
-<summary>
-ddlStatus control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._ddlFrom">
-<summary>
-ddlFrom control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
-<member name="F:WebApplication1.Wish_List._ddlAssign">
-<summary>
-ddlAssign control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -4954,6 +5386,69 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._hdWhlCode">
 <summary>
 hdWhlCode control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdUserVisibility">
+<summary>
+hdUserVisibility control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdSessionDefaultTimeOut">
+<summary>
+hdSessionDefaultTimeOut control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdSessionToCheckTimeOut">
+<summary>
+hdSessionToCheckTimeOut control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdBeginNotification">
+<summary>
+hdBeginNotification control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdNewProj">
+<summary>
+hdNewProj control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdExistProj">
+<summary>
+hdExistProj control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdDifVnd">
+<summary>
+hdDifVnd control.
 </summary>
 <remarks>
 Auto-generated field.

@@ -10,7 +10,17 @@
             <asp:AsyncPostBackTrigger ControlID="btnExcel" /> 
             <%--<asp:AsyncPostBackTrigger ControlID="ddlVendAssign" /> --%>           
         </Triggers>
-        <ContentTemplate>  
+        <ContentTemplate> 
+
+            <div class="row">
+                <div class="col-md-9"></div>
+                <div class="col-md-2">
+                    <asp:Label ID="lblUserLogged" Text="" runat="server"></asp:Label>
+                </div>
+                <div class="col-md-1">
+                    <asp:LinkButton ID="lnkLogout" Text="Click to Logout." OnClick="lnkLogout_Click" runat="server"></asp:LinkButton>
+                </div>
+            </div>
 
             <div class="container-fluid">
                 <div class="breadcrumb-area breadcrumb-bg">
@@ -458,6 +468,7 @@
                 <asp:HiddenField ID="hdShowUserAssignment" Value ="0" runat="server" />
                 <asp:HiddenField ID="hdUserAssigment" Value ="0" runat="server" />
 
+                <asp:HiddenField id="hdWelcomeMess" Value="" runat="server" />
 
             </div>
 
@@ -1306,7 +1317,13 @@
                 console.log("Previous to Fix Footer");
                 fixFooterColumns();
                 console.log("After to Fix Footer");
-            }           
+
+                var hdWelcome = document.getElementById('<%=hdWelcomeMess.ClientID%>').value
+                $('#<%=lblUserLogged.ClientID %>').val(hdWelcome); 
+            }  
+
+            var hdWelcome = document.getElementById('<%=hdWelcomeMess.ClientID%>').value
+            $('#<%=lblUserLogged.ClientID %>').val(hdWelcome); 
 
             var hd1 = document.getElementById('<%=hiddenId1.ClientID%>').value;
             var hd2 = document.getElementById('<%=hiddenId2.ClientID%>').value;

@@ -30,7 +30,18 @@ Public Class Wish_List
         Dim exMessage As String = " "
         Dim sel As Integer = -1
         Dim fullData As Boolean = False
+        Dim url As String = Nothing
         Try
+
+            If Session("userid") Is Nothing Then
+                url = String.Format("Login.aspx?data={0}", "Session Expired!")
+                Response.Redirect(url, False)
+            Else
+                Dim welcomeMsg = ConfigurationManager.AppSettings("UserWelcome")
+                lblUserLogged.Text = String.Format(welcomeMsg, Session("username").ToString().Trim(), Session("userid").ToString().Trim())
+                hdWelcomeMess.Value = lblUserLogged.Text
+            End If
+
             If Not IsPostBack() Then
 
                 Dim flag = GetAccessByUsers(sel, fullData)
@@ -145,7 +156,8 @@ Public Class Wish_List
             writeComputerEventLog(ex.Message)
 
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
-            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "User Logged In Wish List: " + Session("userid").ToString(), "Login at time: " + DateTime.Now.ToString())
+            Dim usr = If(Session("userid") IsNot Nothing, Session("userid").ToString(), "N/A")
+            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "An Exception occurs: " + ex.Message + " for the user: " + usr, " at time: " + DateTime.Now.ToString())
         End Try
 
     End Sub
@@ -2228,6 +2240,32 @@ Public Class Wish_List
 
 #Region "Generics"
 
+    Protected Sub lnkLogout_Click() Handles lnkLogout.Click
+        Try
+            FormsAuthentication.SignOut()
+            Session.Abandon()
+            coockieWork()
+            Session("UserLoginData") = Nothing
+            FormsAuthentication.RedirectToLoginPage()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub coockieWork()
+        Try
+
+            Dim cookie1 As HttpCookie = New HttpCookie(FormsAuthentication.FormsCookieName, "")
+            cookie1.HttpOnly = True
+            cookie1.Expires = DateTime.Now.AddYears(-1)
+            Response.Cookies.Add(cookie1)
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
     Public Function getAllPurcUsers() As List(Of String)
         Dim exMessage As String = Nothing
         Dim dsResult As New DataSet
@@ -2267,40 +2305,49 @@ Public Class Wish_List
         Try
             Dim validUsers = ConfigurationManager.AppSettings("validUsersForWeb")
 
-            'Dim args As String() = Environment.GetCommandLineArgs()
-            'Dim argumentsJoined = String.Join(".", args)
-
-            'Dim arrayArgs As String() = argumentsJoined.Split(".")
-            'optionSelection = UCase(arrayArgs(3).ToString().Replace(",", ""))
-            'user = UCase(arrayArgs(2).ToString().Replace(",", ""))
-
             user = If(Session("userid") IsNot Nothing, UCase(Session("userid").ToString().Trim()), "NA")
             If Not user.Equals("NA") Then
 
-                lstPurcUsers = getAllPurcUsers()
-                If lstPurcUsers.Count > 0 Then
-                    lstPurcUsers.Add("AAVILA") 'test
+                fullData = If(LCase(validUsers.Trim()).Contains(LCase(user.Trim())), True, False)
+                If fullData Then
+                    flag = True
+                    Return flag
+                Else
+                    lstPurcUsers = getAllPurcUsers()
+                    If lstPurcUsers.Count > 0 Then
+                        'authUser = lstPurcUsers.AsEnumerable().Where(Function(val) UCase(val).Trim().Contains(user)).First()
+                        For Each itm As String In lstPurcUsers
+                            If itm.Equals(user) Then
+                                authUser = itm.ToUpper()
+                                fullData = True
+                                Exit For
+                            End If
+                        Next
 
-                    authUser = lstPurcUsers.AsEnumerable().Where(Function(val) UCase(val).Trim().Contains(user)).First()
+                        If Not String.IsNullOrEmpty(authUser) Then
+                            'fullData = If(LCase(validUsers.Trim()).Contains(LCase(authUser.Trim())), True, False)
 
-                    If Not String.IsNullOrEmpty(authUser) Then
+                            If Not fullData Then
+                                sel = 0
+                                flag = False
+                            Else
+                                flag = True
+                            End If
+                            'fullData = False 'test remove
+                            'Session("userid") = user
+                            'full query -- >
+                            'flag = True
+                            Return flag
+                        Else
+                            'test
+                            'Session("userid") = ConfigurationManager.AppSettings("authorizeTestUser")
+                            'test
 
-                        fullData = If(LCase(validUsers.Trim()).Contains(LCase(authUser.Trim())), True, False)
-                        'fullData = False 'test remove
-                        'Session("userid") = user
-                        'full query -- >
-                        flag = True
-                        Return flag
-                    Else
-                        'test
-                        'Session("userid") = ConfigurationManager.AppSettings("authorizeTestUser")
-                        'test
-
-                        'not authorized user
-                        sel = 0
-                        Return False
+                            'not authorized user
+                            sel = 0
+                            Return False
+                        End If
                     End If
-
                 End If
             Else
                 sel = 1

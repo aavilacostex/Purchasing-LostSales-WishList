@@ -30,15 +30,30 @@ Public Class Lost_Sales
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Dim exMessage As String = Nothing
         Dim sel As Integer = -1
+        Dim url As String = Nothing
         'Session("sortDirection") = "0"
         Try
+
+            If Session("userid") Is Nothing Then
+                url = String.Format("Login.aspx?data={0}", "Session Expired!")
+                Response.Redirect(url, False)
+            Else
+                Dim welcomeMsg = ConfigurationManager.AppSettings("UserWelcome")
+                lblUserLogged.Text = String.Format(welcomeMsg, Session("username").ToString().Trim(), Session("userid").ToString().Trim())
+                hdWelcomeMess.Value = lblUserLogged.Text
+            End If
+
             If Not IsPostBack Then
 
                 Dim flag = GetAccessByUsers(sel)
                 If Not flag Then
                     If sel = 0 Then
+                        Dim usr = If(Session("userid") IsNot Nothing, Session("userid").ToString(), "N/A")
+                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "User: " + usr, " User is not authorized to access to LS. Time: " + DateTime.Now.ToString())
                         Response.Redirect("http://svrwebapps.costex.com/PurchasingApp/Wish-List", True)
                     ElseIf sel = 1 Then
+                        Dim usr = If(Session("userid") IsNot Nothing, Session("userid").ToString(), "N/A")
+                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, Nothing, "There is not an user detected tryng to access to LS. Time: " + DateTime.Now.ToString())
                         Response.Redirect("http://svrwebapps.costex.com/PurchasingApp/", True)
                     End If
                 Else
@@ -109,8 +124,6 @@ Public Class Lost_Sales
 
                 End If
 
-
-
             Else
                 Session("EventRaised") = True
 
@@ -155,7 +168,8 @@ Public Class Lost_Sales
             End If
         Catch ex As Exception
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
-            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, ex.Message, ex.ToString)
+            Dim usr = If(Session("userid") IsNot Nothing, Session("userid").ToString(), "N/A")
+            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "An Exception occurs: " + ex.Message + " for the user: " + usr, " at time: " + DateTime.Now.ToString())
         End Try
         'lblMyLabel.Attributes.Add("onclick","javascript:alert('ALERT ALERT!!!')")
     End Sub
@@ -224,6 +238,32 @@ Public Class Lost_Sales
 #End Region
 
 #Region "Generics"
+
+    Protected Sub lnkLogout_Click() Handles lnkLogout.Click
+        Try
+            FormsAuthentication.SignOut()
+            Session.Abandon()
+            coockieWork()
+            Session("UserLoginData") = Nothing
+            FormsAuthentication.RedirectToLoginPage()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub coockieWork()
+        Try
+
+            Dim cookie1 As HttpCookie = New HttpCookie(FormsAuthentication.FormsCookieName, "")
+            cookie1.HttpOnly = True
+            cookie1.Expires = DateTime.Now.AddYears(-1)
+            Response.Cookies.Add(cookie1)
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
 
     Private Function GetDdlByRd(controlName As String) As String
         Dim lstDdls As List(Of String) = New List(Of String)()

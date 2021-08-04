@@ -2,6 +2,18 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
+    <div class="row">
+        <div class="col-md-9">
+            <asp:HiddenField id="hdWelcomeMess" Value="" runat="server" />
+        </div>
+        <div class="col-md-2">
+            <asp:Label ID="lblUserLogged" Text="" runat="server" ></asp:Label>
+        </div>
+        <div class="col-md-1">
+            <asp:LinkButton ID="lnkLogout" Text="Click to Logout." OnClick="lnkLogout_Click" runat="server"></asp:LinkButton>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div id="img-carousel"></div>
     </div>    
@@ -25,6 +37,23 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+
+        function pageLoad(event, args) {
+
+            if (args.get_isPartialLoad()) {
+
+                var hdWelcome = document.getElementById('<%=hdWelcomeMess.ClientID%>').value
+                $('#<%=lblUserLogged.ClientID %>').val(hdWelcome); 
+
+            }
+
+            var hdWelcome = document.getElementById('<%=hdWelcomeMess.ClientID%>').value
+            $('#<%=lblUserLogged.ClientID %>').val(hdWelcome); 
+        }
+
+    </script>
     
 
 </asp:Content>

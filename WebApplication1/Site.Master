@@ -74,7 +74,7 @@
             </div>
 
             <nav class="navbar navbar-expand-md navbar-dark bg-white">
-                <div class="row" style="min-width: 100% !important;">
+                <div id="mainNav" class="row hideProp" style="min-width: 100% !important;">
                     <div class="col-lg-5">
                         <a class="navbar-brand logo" href="~/Default">
                             <img src="~/Images/logo.png" runat="server" />
@@ -87,29 +87,43 @@
                         <div class="collapse navbar-collapse" id="MainNavBar">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="Default">Home <span class="sr-only">(current)</span></a>
+                                    <a class="nav-link" href="http://svrwebapps.costex.com/BaseProject/default.aspx">Home <span class="sr-only">(current)</span></a>
                                 </li>
-                                <%--<li class="nav-item">
-                                    <a class="nav-link" href="Modules/Product-Development">Product Development</a>
-                                </li>    --%>                            
-                                <%--<li class="nav-item"
-                                    <a class="nav-link" href="/Default">Home <span class="sr-only">(current)</span></a>
-                                </li>--%>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="cust" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">Accounting | Finance <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" aria-labelledby="purc">
+                                        <li><a class="dropdown-item" href="http://svrwebapps.costex.com/CustPaymentsSolution/">Customer Payments</a></li>                                       
+                                    </ul>                                    
+                                </li> 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="purc" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">Purchasing <span class="caret"></span></a>
                                     <ul class="dropdown-menu" aria-labelledby="purc">
-                                        <li><a class="dropdown-item" href="Lost-Sales">Lost Sale</a></li>
-                                        <%--<li><a class="dropdown-item" href="Lost-Sales1">Lost Sale1</a></li>--%>
+                                        <li><a class="dropdown-item" href="Lost-Sales">Lost Sale</a></li>                                       
                                         <li><a class="dropdown-item" href="Wish-List">Wish List</a></li>
                                     </ul>                                    
-                                </li>                                
+                                </li> 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="http://example.com" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <asp:Label ID="lblUsername" Text="" runat="server"></asp:Label>
-                                    </a>
+                                    <a class="nav-link dropdown-toggle" href="#" id="sals" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">Sales <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" aria-labelledby="purc">
+                                        <li><a class="dropdown-item" href="http://svrwebapps.costex.com/MassivePricingUpdate/MassivePricingUpdate/">Massive Update for Price</a></li>                                       
+                                    </ul>                                    
+                                </li> 
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="qua" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">Quality Control<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" aria-labelledby="purc">
+                                        <li><a class="dropdown-item" href="http://svrwebapps.costex.com/ClaimsProjectApp/">Customer Claims</a></li>                                       
+                                    </ul>                                    
+                                </li> 
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="http://example.com" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> App Configuration </a>
                                     <div class="dropdown-menu" aria-labelledby="user">
+                                        <a class="dropdown-item" href="#">
+                                            <asp:Label ID="lblUsername" Text="" runat="server"></asp:Label>
+                                        </a>                                        
                                         <a class="dropdown-item" href="#">Configuration</a>
-                                        <a class="dropdown-item" href="#">Logout</a>
+                                        <a class="dropdown-item" href="#">
+                                            <asp:LinkButton ID="lnkLogout" CssClass="dropdown-item" Text="Logout" OnClick="lnkLogout_Click" runat="server"></asp:LinkButton> 
+                                        </a>
                                     </div>
                                 </li>
                             </ul>
@@ -179,7 +193,9 @@
                                     <li><a href="#">Shop</a></li> 
                                 </ul>
                             </div>
-                            <div class="col-lg-4 col-md-6"></div>
+                            <div class="col-lg-4 col-md-6">
+                                <asp:HiddenField ID="hdShowMenu" Value="0" runat="server" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -225,7 +241,20 @@
 
     <script type="text/javascript">  
 
-        var ventanaModal = '<%= ventanaModal.ClientID %>';        
+        var ventanaModal = '<%= ventanaModal.ClientID %>';   
+
+        check();
+
+        function check() {
+            debugger
+
+            var hdShowNav = document.getElementById('<%=hdShowMenu.ClientID%>').value;
+            if (hdShowNav != "0") {
+                $('#mainNav').closest('.row').removeClass('hideProp');
+            } else {
+                $('#mainNav').closest('.row').addClass('hideProp');
+            }
+        }
 
         //(function (window, document, undefined) {
 
