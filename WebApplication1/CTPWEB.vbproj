@@ -230,6 +230,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Wish-List.aspx" />
     <Content Include="KeepAlive.ashx" />
+    <None Include="My Project\PublishProfiles\Release.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
