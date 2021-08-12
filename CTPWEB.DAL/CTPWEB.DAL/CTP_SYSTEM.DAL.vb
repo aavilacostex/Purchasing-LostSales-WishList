@@ -173,13 +173,13 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oemvendor, '' prpech
                                 from qs36f.inmsta Q inner join z on Q.imptn = z.wrkptn left join 
                                 (select dvpart, sum(dvonh#) onhand, sum(dvono#) onorder, max(dvprmg) vendor 
-                                from qs36f.dvinva where dvlocn in ({6}) and trim(dvprmg) = '' and dvonh# <= 0 and dvono# <= 0 group by dvpart) x on Q.imptn = x.dvpart  
+                                from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) = '' or trim(dvprmg) = '000000') and dvonh# <= 0 and dvono# <= 0) group by dvpart) x on Q.imptn = x.dvpart  
                                 inner join qs36f.invptyf on Q.imptn = qs36f.invptyf.ippart
                                 where substr(ucase(trim(imdsc)),1,3) <> 'USE' and impc1 in ('01','03')  
                                 and imptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')	 
                                 and imptn not in (select imptn from qs36f.inmstpat)                                  
                                 and (not REGEXP_LIKE (coalesce(x.vendor, ''),'^[0-9]{2}$') or  x.vendor in ({4}))
-                                and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}) and (trim(dvprmg) <> '' or dvonh# > 0 or dvono# > 0 ))
+                                and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) <> '' and trim(dvprmg) <> '000000') or dvonh# > 0 or dvono# > 0 ))
                                 union
                                 select z.wrkptn imptn, coalesce(catdsc,coalesce(kodesc,'N/A'))
                                 imdsc, coalesce(imds2, 'N/A') imds2, coalesce(imds3, 'N/A') imds3,  
@@ -203,7 +203,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
         'Dim strDateCurrent As String = firstDateCurrent.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
         Dim strDateReduc As String = firstDate.ToString("yyMM", System.Globalization.CultureInfo.InvariantCulture)
         Dim strDateCurrentReduc As String = firstDateCurrent.ToString("yyMM", System.Globalization.CultureInfo.InvariantCulture)
-        Dim regexCriteria As String = "{1,6}"
+        Dim regexCriteria As String = "{6}"
         Dim LostSalesLoc = ConfigurationManager.AppSettings("LostSalesLocations")
         Dim CustExceptions = ConfigurationManager.AppSettings("CustomerExceptions")
         Dim QtySoldLoc = ConfigurationManager.AppSettings("QtySoldLocations")
