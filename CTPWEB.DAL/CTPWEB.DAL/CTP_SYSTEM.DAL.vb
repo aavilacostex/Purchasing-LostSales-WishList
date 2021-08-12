@@ -128,11 +128,11 @@ Public Class CTP_SYSTEM : Implements IDisposable
             devPagIndex = ((CInt(pageIndex) * CInt(pageSize)) + 1).ToString()
             devPagSize = ((CInt(pageIndex) + 1) * CInt(pageSize)).ToString()
 
-            limit = " order by 1 limit {0} , {1}"
+            limit = " order by 12 Desc limit {0} , {1}"
             limitSql = String.Format(limit, devPagIndex, devPagSize)
             'limitSql = ""
         Else
-            limitSql = "order by 1"
+            limitSql = "order by 12 Desc"
         End If
 
         Dim initialQuery As String = "
@@ -154,7 +154,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 (select zoned(sum(odrsq),10,0) from qs36f.horddt where odrcd = 1 and                                     
                                 SUBSTR(DIGITS(ODDATE),5 ,2) || SUBSTR(DIGITS(ODDATE),1 ,2) ||      
                                 SUBSTR(DIGITS(ODDATE),3 ,2) >= '{0}' and odptn = imptn and odcu# 
-                                not in (4384,4385,4381) and odlcn in ('01', '04', '05', '07', '02','09','26')      
+                                not in ({7}) and odlcn in ({8})      
                                 group by odptn) qtysold,
                                 x.onhand, x.onorder, coalesce(x.vendor, '') vendor, impc2,z.QT TQUOTE, 
                                 imprc, qs36f.invptyf.iptqte Timesq,
@@ -168,18 +168,18 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 ELSE ' '  END , '') pagent,                                
                                 coalesce((SELECT INDESC FROM qs36f.INMCAT WHERE INCATA = IMCATA), '') catdesc,
                                 coalesce((SELECT INDESS FROM qs36f.INMCAS WHERE INSBCA = IMSBCA), '') subcatdesc,   
-                                (SELECT count(distinct sccuno) FROM qs36f.slsbyccm WHERE SCCUNO not in  (4384,4385,4381) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH  between 1901 and 2101) totalclients,  
-                                (SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in (4384,4385,4381) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH between 1901 and 2101 ) totalcountries,  
+                                (SELECT count(distinct sccuno) FROM qs36f.slsbyccm WHERE SCCUNO not in  ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH  between '{0}' and '{5}') totalclients,  
+                                (SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH between '{0}' and '{5}' ) totalcountries,  
                                 (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oemvendor, '' prpech
                                 from qs36f.inmsta Q inner join z on Q.imptn = z.wrkptn left join 
                                 (select dvpart, sum(dvonh#) onhand, sum(dvono#) onorder, max(dvprmg) vendor 
-                                from qs36f.dvinva where dvlocn in ('01', '05', '07','26') and trim(dvprmg) = '' and dvonh# <= 0 and dvono# <= 0 group by dvpart) x on Q.imptn = x.dvpart  
+                                from qs36f.dvinva where dvlocn in ({6}) and trim(dvprmg) = '' and dvonh# <= 0 and dvono# <= 0 group by dvpart) x on Q.imptn = x.dvpart  
                                 inner join qs36f.invptyf on Q.imptn = qs36f.invptyf.ippart
                                 where substr(ucase(trim(imdsc)),1,3) <> 'USE' and impc1 in ('01','03')  
                                 and imptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')	 
                                 and imptn not in (select imptn from qs36f.inmstpat)                                  
                                 and (not REGEXP_LIKE (coalesce(x.vendor, ''),'^[0-9]{2}$') or  x.vendor in ({4}))
-                                and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ('01','05','07','26') and (trim(dvprmg) <> '' or dvonh# > 0 or dvono# > 0 ))
+                                and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}) and (trim(dvprmg) <> '' or dvonh# > 0 or dvono# > 0 ))
                                 union
                                 select z.wrkptn imptn, coalesce(catdsc,coalesce(kodesc,'N/A'))
                                 imdsc, coalesce(imds2, 'N/A') imds2, coalesce(imds3, 'N/A') imds3,  
@@ -191,19 +191,26 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 from z left join qs36f.cater on z.wrkptn = catptn 
                                 left join qs36f.inmsta W on z.wrkptn = W.imptn    
                                 left join qs36f.komat on z.wrkptn = koptno 
-                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ('01', '05', '07','26'))) {3} "
+                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}))) {3} "
         'FETCH FIRST 1000 ROWS ONLY
         'revisando aqui error en la query
 
-        Dim yearUse = DateTime.Now().AddYears(-2).Year
+        Dim yearUse = DateTime.Now().AddYears(-1).Year
+        Dim yearUseCurrent = DateTime.Now().Year
         Dim firstDate = New DateTime(yearUse, 1, 1)
+        Dim firstDateCurrent = New DateTime(yearUseCurrent, 1, 1)
         Dim strDate As String = firstDate.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
+        'Dim strDateCurrent As String = firstDateCurrent.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
         Dim strDateReduc As String = firstDate.ToString("yyMM", System.Globalization.CultureInfo.InvariantCulture)
+        Dim strDateCurrentReduc As String = firstDateCurrent.ToString("yyMM", System.Globalization.CultureInfo.InvariantCulture)
         Dim regexCriteria As String = "{1,6}"
+        Dim LostSalesLoc = ConfigurationManager.AppSettings("LostSalesLocations")
+        Dim CustExceptions = ConfigurationManager.AppSettings("CustomerExceptions")
+        Dim QtySoldLoc = ConfigurationManager.AppSettings("QtySoldLocations")
         'Dim limit = "limit 21,30"
         'Dim d2 As DateTime = DateTime.ParseExact(strDate, "ddMMyy", System.Globalization.CultureInfo.InvariantCulture)
 
-        Dim resultQuery = String.Format(initialQuery, strDateReduc, strDate, regexCriteria, limitSql, optVendors)
+        Dim resultQuery = String.Format(initialQuery, strDateReduc, strDate, regexCriteria, limitSql, optVendors, strDateCurrentReduc, LostSalesLoc, CustExceptions, QtySoldLoc)
 
 #Region "old query last"
 
