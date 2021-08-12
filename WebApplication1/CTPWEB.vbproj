@@ -230,6 +230,9 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Wish-List.aspx" />
     <Content Include="KeepAlive.ashx" />
+    <Content Include="DownloadWLTemplate.ashx" />
+    <Content Include="DownloadExcelOutput.ashx" />
+    <Content Include="DownloadLSExcelOutput.ashx" />
     <None Include="My Project\PublishProfiles\Release.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
@@ -348,6 +351,15 @@
     <Compile Include="About.aspx.vb">
       <DependentUpon>About.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="DownloadExcelOutput.ashx.vb">
+      <DependentUpon>DownloadExcelOutput.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadLSExcelOutput.ashx.vb">
+      <DependentUpon>DownloadLSExcelOutput.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadWLTemplate.ashx.vb">
+      <DependentUpon>DownloadWLTemplate.ashx</DependentUpon>
     </Compile>
     <Compile Include="KeepAlive.ashx.vb">
       <DependentUpon>KeepAlive.ashx</DependentUpon>

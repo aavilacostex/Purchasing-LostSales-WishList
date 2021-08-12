@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
 Imports System.Reflection
+Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports ClosedXML.Excel
 Imports CTPWEB.DTO
@@ -238,6 +239,33 @@ Public Class Lost_Sales
 #End Region
 
 #Region "Generics"
+
+    Public Function IsFileinUse(file As FileInfo) As Boolean
+        Dim exMessage As String = Nothing
+        Dim opened As Boolean = False
+        Dim myStream As FileStream = Nothing
+        Try
+            myStream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+        Catch ex As Exception
+
+            If TypeOf ex Is IOException AndAlso IsFileLocked(ex) Then
+                System.IO.File.Delete(file.Name)
+                opened = False
+            Else
+                opened = True
+            End If
+        Finally
+            If myStream IsNot Nothing Then
+                myStream.Close()
+            End If
+        End Try
+        Return opened
+    End Function
+
+    Private Shared Function IsFileLocked(exception As Exception) As Boolean
+        Dim errorCode As Integer = Marshal.GetHRForException(exception) And ((1 << 16) - 1)
+        Return errorCode = 32 OrElse errorCode = 33
+    End Function
 
     Protected Sub lnkLogout_Click() Handles lnkLogout.Click
         Try
@@ -961,12 +989,16 @@ Public Class Lost_Sales
                 .IMPC2 = row.Item("IMPC2").ToString(),
                 .MINDSC = row.Item("MINDSC").ToString(),
                 .CATDESC = row.Item("CATDESC").ToString(),
-                .WLIST = row.Item("WLIST").ToString(),
-                .PROJECT = row.Item("PROJECT").ToString(),
-                .PROJSTATUS = row.Item("PROJSTATUS").ToString(),
+                .WLIST = "",
+                .PROJECT = "",
+                .PROJSTATUS = "",
                 .PAGENT = row.Item("PAGENT").ToString(),
                 .PrPech = row.Item("PrPech").ToString()
                 }).ToList()
+
+            '.WLIST = row.Item("WLIST").ToString(),
+            '    .PROJECT = row.Item("PROJECT").ToString(),
+            '    .PROJSTATUS = row.Item("PROJSTATUS").ToString(),
 
             '.QytQte = row.Item("TQUOTE").ToString(), QTYSOLD? --> saleslast12?
             '.PROJECT = GetDataFromDev(row.Item("IMPTN").ToString(), row.Item("VENDOR").ToString(), 0),
@@ -3835,11 +3867,12 @@ Public Class Lost_Sales
                 Dim price = System.Convert.ToDecimal(e.Row.Cells(13).Text)
                 e.Row.Cells(13).Text = String.Format("{0:C2}", price)
 
-                Dim lbl1 = DirectCast(e.Row.FindControl("lblTCountries"), Label)
-                lbl1.Text = "country"
 
-                Dim lbl2 = DirectCast(e.Row.FindControl("lblOEMPart"), Label)
-                lbl2.Text = "OEM"
+                'Dim lbl1 = DirectCast(e.Row.FindControl("lblTCountries"), Label)
+                'lbl1.Text = "country"
+
+                'Dim lbl2 = DirectCast(e.Row.FindControl("lblOEMPart"), Label)
+                'lbl2.Text = "OEM"
 
 
                 'execute subqueries for every row
@@ -4030,37 +4063,79 @@ Public Class Lost_Sales
         Dim newDt As DataTable = New DataTable()
         Dim direction As String = Nothing
         Dim exMessage As String = Nothing
+
         Try
+            direction = DirectCast(Session("sortDirection"), String)
+            Dim dsFull = DirectCast(Session("LostSaleData"), DataSet)
             Dim dt As DataTable = DirectCast(grvLostSales.DataSource, DataTable)
+            Dim field = e.SortExpression
             If dt IsNot Nothing Then
-                dtw = New DataView(dt)
-                direction = DirectCast(Session("sortDirection"), String)
-                dtw.Sort = e.SortExpression + " " + SetSortDirection(direction)
 
-                newDt = dtw.ToTable()
-                Dim ds As DataSet = New DataSet()
-                ds.Tables.Add(newDt)
-                Session("LostSaleData") = ds
-                grvLostSales.DataSource = ds
-                grvLostSales.DataBind()
+                Dim num = 0
 
-                'ddlVendAssign_SelectedIndexChanged(Nothing, Nothing)
+                If SetSortDirection(direction) = "ASC" Then
+                    'Dim dtQuery = dt.AsEnumerable().Where(Function(ee) Integer.TryParse(ee.Item(field).ToString(), num) = True).CopyToDataTable()
+                    grvLostSales.DataSource = dt.AsEnumerable().OrderBy(Function(o) CInt(o.Item(field).ToString())).CopyToDataTable()
+                Else
+                    grvLostSales.DataSource = dt.AsEnumerable().OrderByDescending(Function(o) CInt(o.Item(field).ToString())).CopyToDataTable()
+                End If
+
+#Region "Old"
+
+                ' dtw = New DataView(dt)
+                '    direction = DirectCast(Session("sortDirection"), String)
+                '    dtw.Sort = e.SortExpression + " " + SetSortDirection(direction)
+
+                '    newDt = dtw.ToTable()
+
+
+
+                '    Dim ds As DataSet = New DataSet()
+                '    ds.Tables.Add(newDt)
+                '    Session("LostSaleData") = ds
+                '    grvLostSales.DataSource = ds
+                '    grvLostSales.DataBind()
+
+                '    'ddlVendAssign_SelectedIndexChanged(Nothing, Nothing)
+
+#End Region
+
             Else
-                Dim ds As DataSet = New DataSet()
-                ds = getDataSource()
-                dtw = New DataView(ds.Tables(0))
-                direction = DirectCast(Session("sortDirection"), String)
-                dtw.Sort = e.SortExpression + " " + SetSortDirection(direction)
 
-                newDt = dtw.ToTable()
-                ds.Tables.RemoveAt(0)
-                ds.Tables.Add(newDt)
-                Session("LostSaleData") = ds
-                grvLostSales.DataSource = ds
-                grvLostSales.DataBind()
+                If SetSortDirection(direction) = "ASC" Then
+                    grvLostSales.DataSource = dsFull.Tables(0).AsEnumerable().OrderBy(Function(o) CInt(o.Item(field).ToString())).CopyToDataTable()
+                Else
+                    grvLostSales.DataSource = dsFull.Tables(0).AsEnumerable().OrderByDescending(Function(o) CInt(o.Item(field).ToString())).CopyToDataTable()
+                End If
+
+#Region "old"
+
+                '    Dim ds As DataSet = New DataSet()
+                '    ds = getDataSource()
+                '    dtw = New DataView(ds.Tables(0))
+                '    direction = DirectCast(Session("sortDirection"), String)
+                '    dtw.Sort = e.SortExpression + " " + SetSortDirection(direction)
+
+                '    newDt = dtw.ToTable()
+                '    ds.Tables.RemoveAt(0)
+                '    ds.Tables.Add(newDt)
+                '    Session("LostSaleData") = ds
+                '    grvLostSales.DataSource = ds
+                '    grvLostSales.DataBind()
 
                 'ddlVendAssign_SelectedIndexChanged(Nothing, Nothing)
+
+#End Region
+
             End If
+
+            grvLostSales.DataBind()
+
+            Dim dtt = DirectCast(grvLostSales.DataSource, DataTable)
+            Dim ds = New DataSet()
+            ds.Tables.Add(dtt)
+            Session("LostSaleData") = ds
+
         Catch ex As Exception
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
             writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, ex.Message, ex.ToString)
@@ -4477,11 +4552,34 @@ Public Class Lost_Sales
             If dsResult IsNot Nothing Then
                 If dsResult.Tables(0).Rows.Count > 0 Then
 
-                    Dim userPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                    Dim folderPath As String = userPath & "\Lost_Sale_Data\"
+                    Dim pathToProcess = ConfigurationManager.AppSettings("urlLSExcelOutput")
+                    'Dim updUserPath = userPath + "\WishList-Template\"
+                    Dim folderPath = If(Not String.IsNullOrEmpty(ConfigurationManager.AppSettings("urlLSExcelOutput")), ConfigurationManager.AppSettings("urlLSExcelOutput"), "")
+                    Dim methodMessage = If(Not String.IsNullOrEmpty(folderPath), "The template document will be downloaded to your documents folder", "There is not a path defined for this document. Call an administrator!!")
+
+                    'Dim userPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    'Dim folderPath As String = userPath & "\Lost_Sale_Data\"
 
                     If Not Directory.Exists(folderPath) Then
                         Directory.CreateDirectory(folderPath)
+                    Else
+                        Dim files = Directory.GetFiles(pathToProcess)
+                        Dim fi = Nothing
+                        If files.Length = 1 Then
+                            For Each item In files
+                                fi = item
+                                Dim isOpened = IsFileinUse(New FileInfo(fi))
+                                If Not isOpened Then
+                                    File.Delete(item)
+                                Else
+                                    SendMessage("Please close the file " & fi & " in order to proceed!", messageType.info)
+                                    Exit Sub
+                                End If
+                            Next
+                        Else
+                            'SendMessage("Please close the file " & fi & " in order to proceed!", messageType.info)
+                            'Exit Sub
+                        End If
                     End If
 
                     Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
@@ -4491,7 +4589,7 @@ Public Class Lost_Sales
                         End If
 
                         Dim title As String
-                        title = "Lost_Sale_Generated_by "
+                        title = "Lost_Sale_Output_Generated_by "
                         fileName = objBL.adjustDatetimeFormat(title, fileExtension)
 
                     End Using
@@ -4517,8 +4615,22 @@ Public Class Lost_Sales
 
                     If File.Exists(fullPath) Then
 
-                        Dim methodMessage = "The template document will be downloaded to your documents folder"
-                        SendMessage(methodMessage, messageType.info)
+
+                        Dim newLocalFile As FileInfo = New FileInfo(fullPath)
+                        If newLocalFile.Exists Then
+                            Try
+                                Session("filePathLSExcelOutput") = fullPath
+                                Response.Redirect("DownloadLSExcelOutput.ashx", True)
+                                'Process.Start("explorer.exe", localFilePath)
+                            Catch Win32Exception As Win32Exception
+                                Shell("explorer " & fullPath, AppWinStyle.NormalFocus)
+                            Catch ex As Exception
+                                writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "Error Ocurred: " + ex.Message + " for user " + Session("userid").ToString(), "Occurs at time: " + DateTime.Now.ToString())
+                            End Try
+                        End If
+
+                        ''Dim methodMessage = "The template document will be downloaded to your documents folder"
+                        ''SendMessage(methodMessage, messageType.info)
                         'Dim rsConfirm As DialogResult = MessageBox.Show("The file was created successfully in this path " & folderPath & " .Do you want to open the created document location?", "CTP System", MessageBoxButtons.YesNo)
                         'If rsConfirm = DialogResult.Yes Then
                         '    Try
@@ -4545,20 +4657,20 @@ Public Class Lost_Sales
         Dim lstReferences As Dictionary(Of String, String) = New Dictionary(Of String, String)()
         Try
 
-            lstReferences = GetCheckboxesDisp()
-            If lstReferences Is Nothing Then
-                methodMessage = "An exception occur in the method execution!"
-                SendMessage(methodMessage, messageType.Error)
-            Else
-                If lstReferences.Count = 0 Then
-                    methodMessage = "Please select the items that you want to update and then click this button!"
-                    SendMessage(methodMessage, messageType.warning)
-                Else
-                    Session("dctSelectedParts") = lstReferences
-                    hdShowUserAssignment.Value = "1"
-                    ddlUser2.SelectedIndex = 0
-                End If
-            End If
+            'lstReferences = GetCheckboxesDisp()
+            'If lstReferences Is Nothing Then
+            '    methodMessage = "An exception occur in the method execution!"
+            '    SendMessage(methodMessage, messageType.Error)
+            'Else
+            '    If lstReferences.Count = 0 Then
+            '        methodMessage = "Please select the items that you want to update and then click this button!"
+            '        SendMessage(methodMessage, messageType.warning)
+            '    Else
+            '        Session("dctSelectedParts") = lstReferences
+            '        hdShowUserAssignment.Value = "1"
+            '        ddlUser2.SelectedIndex = 0
+            '    End If
+            'End If
 
 
 #Region "PDF WORK"

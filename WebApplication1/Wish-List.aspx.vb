@@ -973,11 +973,35 @@ Public Class Wish_List
             If dsResult IsNot Nothing Then
                 If dsResult.Tables(0).Rows.Count > 0 Then
 
-                    Dim userPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                    Dim folderPath As String = userPath & "\Wish_List_Data\"
+                    Dim pathToProcess = ConfigurationManager.AppSettings("urlExcelOutput")
+                    'Dim updUserPath = userPath + "\WishList-Template\"
+                    Dim folderPath = If(Not String.IsNullOrEmpty(ConfigurationManager.AppSettings("urlExcelOutput")), ConfigurationManager.AppSettings("urlExcelOutput"), "")
+                    Dim methodMessage = If(Not String.IsNullOrEmpty(folderPath), "The template document will be downloaded to your documents folder", "There is not a path defined for this document. Call an administrator!!")
+
+
+                    'Dim userPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    'Dim folderPath As String = userPath & "\Wish_List_Data\"
 
                     If Not Directory.Exists(folderPath) Then
                         Directory.CreateDirectory(folderPath)
+                    Else
+                        Dim files = Directory.GetFiles(pathToProcess)
+                        Dim fi = Nothing
+                        If files.Length = 1 Then
+                            For Each item In files
+                                fi = item
+                                Dim isOpened = IsFileinUse(New FileInfo(fi))
+                                If Not isOpened Then
+                                    File.Delete(item)
+                                Else
+                                    SendMessage("Please close the file " & fi & " in order to proceed!", messageType.info)
+                                    Exit Sub
+                                End If
+                            Next
+                        Else
+                            'SendMessage("Please close the file " & fi & " in order to proceed!", messageType.info)
+                            'Exit Sub
+                        End If
                     End If
 
                     Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
@@ -987,7 +1011,7 @@ Public Class Wish_List
                         End If
 
                         Dim title As String
-                        title = "Wish_List_Generated_by "
+                        title = "Wish_List_Output_Data_Generated_by "
                         fileName = objBL.adjustDatetimeFormat(title, fileExtension)
 
                     End Using
@@ -1013,8 +1037,21 @@ Public Class Wish_List
 
                     If File.Exists(fullPath) Then
 
-                        Dim methodMessage = "The template document will be downloaded to your documents folder"
-                        SendMessage(methodMessage, messageType.info)
+                        Dim newLocalFile As FileInfo = New FileInfo(fullPath)
+                        If newLocalFile.Exists Then
+                            Try
+                                Session("filePathExcelOutput") = fullPath
+                                Response.Redirect("DownloadExcelOutput.ashx", True)
+                                'Process.Start("explorer.exe", localFilePath)
+                            Catch Win32Exception As Win32Exception
+                                Shell("explorer " & fullPath, AppWinStyle.NormalFocus)
+                            Catch ex As Exception
+                                writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "Error Ocurred: " + ex.Message + " for user " + Session("userid").ToString(), "Occurs at time: " + DateTime.Now.ToString())
+                            End Try
+                        End If
+
+                        'Dim methodMessage = "The template document will be downloaded to your documents folder"
+                        'SendMessage(methodMessage, messageType.info)
                         'Dim rsConfirm As DialogResult = MessageBox.Show("The file was created successfully in this path " & folderPath & " .Do you want to open the created document location?", "CTP System", MessageBoxButtons.YesNo)
                         'If rsConfirm = DialogResult.Yes Then
                         '    Try
@@ -1356,12 +1393,17 @@ Public Class Wish_List
                         Dim newLocalFile As FileInfo = New FileInfo(localFilePath)
                         If newLocalFile.Exists Then
                             Try
-                                Process.Start("explorer.exe", localFilePath)
+                                Session("filePathExcel") = localFilePath
+                                Response.Redirect("DownloadWLTemplate.ashx", True)
+                                'Process.Start("explorer.exe", localFilePath)
                             Catch Win32Exception As Win32Exception
                                 Shell("explorer " & localFilePath, AppWinStyle.NormalFocus)
+                            Catch ex As Exception
+                                writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "Error Ocurred: " + ex.Message + " for user " + Session("userid").ToString(), "Occurs at time: " + DateTime.Now.ToString())
                             End Try
                         End If
-
+                        'Dim dss = DirectCast(Session("WishListData"), DataSet)
+                        'loadData(dss)
                     End If
                 End Using
 

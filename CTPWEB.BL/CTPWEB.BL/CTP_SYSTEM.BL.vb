@@ -244,7 +244,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
         Dim result As String = Nothing
         Try
             Dim objDal = New DAL.CTP_SYSTEM()
-            Dim old_strSql = "select count(distinct A2.cuctry) totalcountry from qs36f.cscumpno A2 where A2.cunum in ( select distinct A3.qdcuno from qs36f.qtedtld A3 where A3.qdptno='{0}' and ((mod(  A3.qdqtdt,100)*100)+(int(A3.qdqtdt/10000)) > '{1}'))"
+            Dim old_strSql = "select count(distinct A2.cuctry) totalcountries from qs36f.cscumpno A2 where A2.cunum in ( select distinct A3.qdcuno from qs36f.qtedtld A3 where A3.qdptno='{0}' and ((mod(  A3.qdqtdt,100)*100)+(int(A3.qdqtdt/10000)) > '{1}'))"
             Dim strSql = "SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in (4384,4385,4381) and SCPTNO ='{0}' and ((SCYEAR*100)+ SCMNTH) >= '{1}' "
             Dim yearc = Now.AddYears(CInt(factor)).Year
             Dim customDate = (yearc Mod 100).ToString() + (Now.Month.ToString("d2"))

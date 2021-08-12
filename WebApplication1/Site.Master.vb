@@ -47,9 +47,20 @@ Public Class SiteMaster
                 'Response.Redirect(url, False)
                 hdShowMenu.Value = "0"
             Else
+                Dim validUsers = ConfigurationManager.AppSettings("validUsersForWeb")
+                Dim user = If(Session("userid") IsNot Nothing, Session("userid").ToString(), "NA")
                 Dim usernam = If(Session("userid") IsNot Nothing, Session("username").ToString(), "")
-                lblUsername.Text = Session("userid").ToString() + "-" + usernam.Trim()
-                hdShowMenu.Value = "1"
+
+                Dim fullData = If(LCase(validUsers.Trim()).Contains(LCase(user.Trim())), True, False)
+                If fullData Then
+                    lblUsername.Text = Session("userid").ToString() + "-" + usernam.Trim()
+                    hdShowMenu.Value = "1"
+                Else
+                    hdShowMenu.Value = "0"
+                End If
+
+                'lblUsername.Text = Session("userid").ToString() + "-" + usernam.Trim()
+                'hdShowMenu.Value = "1"
             End If
 
             If Not IsPostBack() Then

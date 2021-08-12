@@ -7,7 +7,7 @@
     <asp:UpdatePanel ID="updatepnl1" runat="server">
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="submit" /> 
-            <asp:AsyncPostBackTrigger ControlID="btnExcel" /> 
+            <asp:PostBackTrigger ControlID="btnExcel" /> 
             <%--<asp:AsyncPostBackTrigger ControlID="ddlVendAssign" /> --%>           
         </Triggers>
         <ContentTemplate> 
@@ -540,7 +540,7 @@
                                         <asp:BoundField DataField="IMDS2" HeaderText="DESCRIPTION 2" ItemStyle-Width="7%" SortExpression="IMDS2" ItemStyle-CssClass="hidecol" HeaderStyle-CssClass="hidecol" />
                                         <asp:BoundField DataField="IMDS3" HeaderText="DESCRIPTION 3" ItemStyle-Width="7%" SortExpression="IMDS3" ItemStyle-CssClass="hidecol" HeaderStyle-CssClass="hidecol" />
                                         <asp:BoundField DataField="TQUOTE" HeaderText="QTY QTE" ItemStyle-Width="3%" SortExpression="TQUOTE" />
-                                        <asp:BoundField DataField="TIMESQ" HeaderText="TIMES QTE" ItemStyle-Width="4%" SortExpression="TIMESQ" />
+                                        <asp:BoundField DataField="TIMESQ" HeaderText="TIMES QTE" ItemStyle-Width="4%" SortExpression="TIMESQ" DataFormatString="{0:D}" />
                                         <asp:BoundField DataField="NCUS" HeaderText="CUSTS.QUOTE" ItemStyle-Width="4%" SortExpression="NCUS" />
                                         <asp:BoundField DataField="QTYSOLD" HeaderText="SALES LAST12" ItemStyle-Width="4%" SortExpression="QTYSOLD" />
                                         <asp:BoundField DataField="VENDOR" HeaderText="VND NO" ItemStyle-Width="5%" SortExpression="VENDOR" />
@@ -620,7 +620,7 @@
                 </div>
             </div>
 
-            <div id="reloadGrid" class="container">
+            <div id="reloadGrid" class="container hideProp">
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-4 fullTextBox centered">
@@ -1077,6 +1077,12 @@
 
         $('body').on('click', 'click-in', function () {
             alert("pepe");
+        });
+
+        $('body').on('click', '#MainContent_btnPdf', function (e) {
+
+            messageFormSubmitted("This functionality is in testing process!", "info");
+
         });
 
         function ShowAssignUser() {            

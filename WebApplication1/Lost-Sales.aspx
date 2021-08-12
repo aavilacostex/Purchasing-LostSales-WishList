@@ -7,7 +7,7 @@
     <asp:UpdatePanel ID="updatepnl1" runat="server">
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="submit" /> 
-            <asp:AsyncPostBackTrigger ControlID="btnExcel" /> 
+            <asp:PostBackTrigger ControlID="btnExcel" /> 
             <%--<asp:AsyncPostBackTrigger ControlID="ddlVendAssign" /> --%>           
         </Triggers>
         <ContentTemplate> 
@@ -515,7 +515,7 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="PART NUMBER" ItemStyle-Width="8%" SortExpression="IMPTN" >
+                                        <asp:TemplateField HeaderText="PART NUMBER" ItemStyle-Width="7%" SortExpression="IMPTN" >
                                             <HeaderStyle CssClass="GridHeaderStyle" />
                                             <ItemStyle CssClass="GridHeaderStyle" />
                                             <EditItemTemplate>  
@@ -540,9 +540,9 @@
                                         <asp:BoundField DataField="IMDS2" HeaderText="DESCRIPTION 2" ItemStyle-Width="7%" SortExpression="IMDS2" ItemStyle-CssClass="hidecol" HeaderStyle-CssClass="hidecol" />
                                         <asp:BoundField DataField="IMDS3" HeaderText="DESCRIPTION 3" ItemStyle-Width="7%" SortExpression="IMDS3" ItemStyle-CssClass="hidecol" HeaderStyle-CssClass="hidecol" />
                                         <asp:BoundField DataField="TQUOTE" HeaderText="QTY QTE" ItemStyle-Width="3%" SortExpression="TQUOTE" />
-                                        <asp:BoundField DataField="TIMESQ" HeaderText="TIMES QTE" ItemStyle-Width="4%" SortExpression="TIMESQ" />
+                                        <asp:BoundField DataField="TIMESQ" HeaderText="TIMES QTE" ItemStyle-Width="4%" SortExpression="TIMESQ" DataFormatString="{0:D}" />
                                         <asp:BoundField DataField="NCUS" HeaderText="CUSTS.QUOTE" ItemStyle-Width="4%" SortExpression="NCUS" />
-                                        <asp:BoundField DataField="QTYSOLD" HeaderText="SALES LAST12" ItemStyle-Width="4%" SortExpression="QTYSOLD" />
+                                        <asp:BoundField DataField="QTYSOLD" HeaderText="LAST12" ItemStyle-Width="4%" SortExpression="QTYSOLD" />
                                         <asp:BoundField DataField="VENDOR" HeaderText="VND NO" ItemStyle-Width="5%" SortExpression="VENDOR" />
                                         <asp:BoundField DataField="VENDORNAME" HeaderText="VND NAME" ItemStyle-Width="6%" SortExpression="VENDORNAME" />
                                         <asp:BoundField DataField="PAGENT" HeaderText="P.AGENT" ItemStyle-Width="6%" SortExpression="PAGENT" />
@@ -553,11 +553,14 @@
                                         <asp:BoundField DataField="PROJSTATUS" HeaderText="DEV.STATUS" ItemStyle-Width="5%" SortExpression="PROJSTATUS" />--%>
                                         <asp:BoundField DataField="F20" HeaderText="LOC.20" ItemStyle-Width="2%" SortExpression="F20" />
                                         <asp:BoundField DataField="FOEM" HeaderText="OEM VND" ItemStyle-Width="3%" SortExpression="FOEM" />
-                                        <asp:BoundField DataField="IMPC1" HeaderText="MAJOR" ItemStyle-Width="3%" SortExpression="IMPC1" />
-                                        <asp:BoundField DataField="CATDESC" HeaderText="CATEGORY" ItemStyle-Width="11%" SortExpression="CATDESC" />
+                                        <asp:BoundField DataField="IMPC1" HeaderText="MAJOR" ItemStyle-Width="2%" SortExpression="IMPC1" />
+                                        <asp:BoundField DataField="CATDESC" HeaderText="CATEGORY" ItemStyle-Width="10%" SortExpression="CATDESC" />
                                         <asp:BoundField DataField="IMPC2" HeaderText="MINOR" ItemStyle-Width="3%" SortExpression="IMPC2" ItemStyle-CssClass="hidecol" HeaderStyle-CssClass="hidecol" />
                                         <asp:BoundField DataField="MINDSC" HeaderText="DESC" ItemStyle-Width="9%" SortExpression="MINDSC" ItemStyle-CssClass="hidecol" HeaderStyle-CssClass="hidecol" />
-                                        <asp:BoundField DataField="PRPECH" HeaderText="Person in Charge" ItemStyle-Width="8%" SortExpression="PRPECH" />
+                                        <asp:BoundField DataField="totalclients" HeaderText="T.Clients" ItemStyle-Width="4%" SortExpression="totalclients" />
+                                        <asp:BoundField DataField="totalcountries" HeaderText="T.Countries" ItemStyle-Width="4%" SortExpression="totalcountries" />
+                                        <asp:BoundField DataField="oempart" HeaderText="OEM Part" ItemStyle-Width="4%" SortExpression="oempart" />
+                                        <asp:BoundField DataField="PRPECH" HeaderText="Person in Charge" ItemStyle-Width="6%" SortExpression="PRPECH" />
                                         <%--<asp:TemplateField HeaderText="Total Clients" ItemStyle-Width="3%">
                                             <HeaderStyle CssClass="GridHeaderStyle" />
                                             <ItemStyle CssClass="GridHeaderStyle" />
@@ -566,22 +569,22 @@
                                                 <asp:Label ID="lblTClients" Text="" runat="server"></asp:Label>
                                             </ItemTemplate>
                                         </asp:TemplateField> --%>
-                                        <asp:TemplateField HeaderText="T.Countries" ItemStyle-Width="4%">
+                                        <%--<asp:TemplateField HeaderText="T.Countries" ItemStyle-Width="4%">
                                             <HeaderStyle CssClass="GridHeaderStyle" />
                                             <ItemStyle CssClass="GridHeaderStyle" />
                                             <HeaderTemplate>T.Countries</HeaderTemplate>
                                             <ItemTemplate>
                                                 <asp:Label ID="lblTCountries" Text="" runat="server"></asp:Label>
                                             </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="OEM Part" ItemStyle-Width="3%">
+                                        </asp:TemplateField>--%>
+                                        <%--<asp:TemplateField HeaderText="OEM Part" ItemStyle-Width="3%">
                                             <HeaderStyle CssClass="GridHeaderStyle" />
                                             <ItemStyle CssClass="GridHeaderStyle" />
                                             <HeaderTemplate>OEM Part</HeaderTemplate>
                                             <ItemTemplate>
                                                 <asp:Label ID="lblOEMPart" Text="" runat="server"></asp:Label>
                                             </ItemTemplate>
-                                        </asp:TemplateField>
+                                        </asp:TemplateField>--%>
                                         <asp:TemplateField HeaderText="DETAILS">
                                             <ItemTemplate>
                                                 <asp:LinkButton ID="lnkDetails" runat="server" TabIndex="1" ToolTip="Get Reference Detail" CssClass="click-in" CommandName="show" 
@@ -620,7 +623,7 @@
                 </div>
             </div>
 
-            <div id="reloadGrid" class="container">
+            <div id="reloadGrid" class="container hideProp">
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-4 fullTextBox centered">
@@ -1077,6 +1080,12 @@
 
         $('body').on('click', 'click-in', function () {
             alert("pepe");
+        });
+
+        $('body').on('click', '#MainContent_btnPdf', function (e) {
+
+            messageFormSubmitted("This functionality is in testing process!", "info");
+
         });
 
         function ShowAssignUser() {            

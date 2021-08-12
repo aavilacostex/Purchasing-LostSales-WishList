@@ -23,3 +23,4 @@ C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSale
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.xml
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.pdb
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\CTPWEB.UTIL\CTPWEB.UTIL\obj\Release\CTPWEB.UTIL.vbprojAssemblyReference.cache

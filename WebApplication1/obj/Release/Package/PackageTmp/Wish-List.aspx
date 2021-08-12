@@ -10,7 +10,9 @@
             <asp:AsyncPostBackTrigger ControlID="ddlUser2" /> 
             <asp:AsyncPostBackTrigger ControlID="ddlStatus3" /> 
             <asp:PostBackTrigger ControlID="hdCustomerNoSelected" /> 
-            <asp:PostBackTrigger ControlID="hdCustomerNoSelected1" />             
+            <asp:PostBackTrigger ControlID="hdCustomerNoSelected1" />     
+            <asp:PostBackTrigger ControlID="btnWlTemplate" />    
+            <asp:PostBackTrigger ControlID="btnExcel" />   
         </Triggers>
         <ContentTemplate>
             <script>
@@ -1200,7 +1202,7 @@
                 </div>
             </div>
 
-            <div id="reloadGrid" class="container">
+            <div id="reloadGrid" class="container hideProp">
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-4 fullTextBox centered">
@@ -1708,16 +1710,18 @@
 
         // show import excel panel
         $('body').on('click', '#MainContent_btnImportExcel', function (e) {
-            //debugger            
+            //debugger    
 
-            var hdFile = document.getElementById('<%=hdProdDevFlag.ClientID%>').value
+            messageFormSubmitted("This functionality is in the input data validation process!", "info");
+
+            <%--var hdFile = document.getElementById('<%=hdProdDevFlag.ClientID%>').value
             if (hdFile == "0") 
                 $('#<%=hdFileImportFlag.ClientID %>').val("1")  
                 $('#<%=hdNewRef1Flag.ClientID %>').val("0")  
                 $('#<%=hdNewRef2Flag.ClientID %>').val("0")  
                 $('#<%=hdNewRef3Flag.ClientID %>').val("0")  
                 $('#<%=hdUpdateFullRefFlag.ClientID %>').val("0")  
-                $('#<%=hdUpdateMedRefFlag.ClientID %>').val("0")  
+                $('#<%=hdUpdateMedRefFlag.ClientID %>').val("0")  --%>
                
         });
 
@@ -1730,11 +1734,25 @@
                 $('#<%=hdFileImportFlag.ClientID %>').val("0")             
         }); 
 
+        $('body').on('click', '#MainContent_btnPdf', function (e) {
+
+            messageFormSubmitted("This functionality is in testing process!", "info");
+
+        });
+
+        $('body').on('click', '#MainContent_btnAddTo', function (e) {
+
+            messageFormSubmitted("This functionality is under review by the technical team!", "info");
+
+        });
+
         // show new item 1 panel
         $('body').on('click', '#MainContent_btnNewItem', function (e) {
             //debugger
 
-            var hdNew1 = document.getElementById('<%=hdNewRef1Flag.ClientID%>').value
+            messageFormSubmitted("This functionality is in the input data validation process!", "info");
+
+            <%--var hdNew1 = document.getElementById('<%=hdNewRef1Flag.ClientID%>').value
             if (hdNew1 == "0") {
                 $('#<%=hdFileImportFlag.ClientID %>').val("0")
                 $('#<%=hdNewRef1Flag.ClientID %>').val("1")
@@ -1759,7 +1777,7 @@
                 if ($(this).val() == watermarkPart) {
                     $(this).val('').removeClass('watermark');
                 }
-            });
+            });--%>
         });
 
         //close panel with part header

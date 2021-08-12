@@ -130,8 +130,9 @@ Public Class CTP_SYSTEM : Implements IDisposable
 
             limit = " order by 1 limit {0} , {1}"
             limitSql = String.Format(limit, devPagIndex, devPagSize)
+            'limitSql = ""
         Else
-            limitSql = ""
+            limitSql = "order by 1"
         End If
 
         Dim initialQuery As String = "
@@ -154,56 +155,43 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 SUBSTR(DIGITS(ODDATE),5 ,2) || SUBSTR(DIGITS(ODDATE),1 ,2) ||      
                                 SUBSTR(DIGITS(ODDATE),3 ,2) >= '{0}' and odptn = imptn and odcu# 
                                 not in (4384,4385,4381) and odlcn in ('01', '04', '05', '07', '02','09','26')      
-                                group by odptn) qtysold, 
-                                /*(SELECT sum(SCTQTY) FROM qs36f.slsbyccm WHERE SCCUNO not in (4384,4385,4381) and SCPTNO = imptn and (SCYEAR*100)+ SCMNTH  >= '{0}') qtysold,*/    
-                                x.onhand, x.onorder, coalesce(x.vendor, '') vendor, impc2,z.QT TQUOTE,                                
-                                /*(Q.IMQTE+Q.IMQT01+Q.IMQT02+Q.IMQT03+Q.IMQT04+Q.IMQT05+Q.IMQT06+
-                                Q.IMQT07+Q.IMQT08+Q.imqT09+Q.IMQT10+Q.IMQT11+Q.IMQT12) TQUOTE,*/    
+                                group by odptn) qtysold,
+                                x.onhand, x.onorder, coalesce(x.vendor, '') vendor, impc2,z.QT TQUOTE, 
                                 imprc, qs36f.invptyf.iptqte Timesq,
-                                coalesce((select 'X' from qs36f.dvinva where dvlocn='20' and dvpart=imptn and dvonh#>0),' ') F20, 							 
-                                /*(case when x.vendor = '261339' or x.vendor='060106' or x.vendor='262369' or x.vendor = '262673' or x.vendor='261903' or x.vendor='150064' then 'X' else '' end) Foem, */                               
-                                 coalesce ((select 'X' from qs36f.cntrll A where A.cnt01 = '416' and cntde1 = x.vendor),'') Foem,                                
+                                coalesce((select 'X' from qs36f.dvinva where dvlocn='20' and dvpart=imptn and dvonh#>0),' ') F20, 
+                                coalesce ((select 'X' from qs36f.cntrll A where A.cnt01 = '416' and cntde1 = x.vendor),'') Foem,                                
                                 zoned(coalesce((select count(distinct qdcuno) from qs36f.qtedtld where qdptno=imptn and qdyear||qdmth||qdday >= '{1}'),0),5,0) Ncus, 
-                                impc1, imcata, (select mindes from qs36f.mincodes where mincod = Q.impc2) mindsc, 
-                                coalesce((select vmname from qs36f.vnmas where vmvnum = x.vendor), '')  vendorname, 
-                                coalesce((SELECT CASE WHEN VM#POY <> 0
-                                THEN (SELECT MIN(USNAME) FROM qs36f.CSUSER WHERE USPTY9 = '' AND USPURC = (SELECT VM#POY FROM qs36f.VNMAS WHERE VMVNUM = x.vendor))
-                                ELSE ' ' END AS PAGENT FROM qs36f.VNMAS WHERE VMVNUM = x.vendor), '') pagent,                                
-                                (select count(whlpartn) from qs36f.prdwl where whlpartn = imptn ) wlist,
-                                coalesce((select prhcod 
-                                from qs36f.prdvld where vmvnum = x.vendor and prdptn = imptn FETCH FIRST 1 ROWS ONLY), 0) project,  
-                                coalesce((select prdsts from qs36f.prdvld where vmvnum = x.vendor and prdptn = imptn FETCH FIRST 1 ROWS ONLY),'') projstatus,
+                                impc1, imcata, (select mindes from qs36f.mincodes where mincod = Q.impc2) mindsc,
+                                CASE WHEN (coalesce (x.vendor,'') = '') Or (LENGTH(RTRIM(TRANSLATE(x.vendor, '*', ' 0123456789'))) = 0 ) THEN '' ELSE (select vmname from qs36f.vnmas where vmvnum = x.vendor) END  vendorname, 
+                                coalesce(CASE WHEN coalesce(x.vendor, '') <> ''
+                                THEN (SELECT MIN(USNAME) FROM qs36f.CSUSER WHERE USPTY9 = '' AND USPURC = case when coalesce(x.vendor, '') <> '' then (SELECT VM#POY FROM qs36f.VNMAS WHERE VMVNUM = x.vendor) else 5000000 end )  
+                                ELSE ' '  END , '') pagent,                                
                                 coalesce((SELECT INDESC FROM qs36f.INMCAT WHERE INCATA = IMCATA), '') catdesc,
                                 coalesce((SELECT INDESS FROM qs36f.INMCAS WHERE INSBCA = IMSBCA), '') subcatdesc,   
-                                0 totalclients, 0 totalcountry, '' oemvendor , '' prpech
-                                /*(select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oemvendor */  
+                                (SELECT count(distinct sccuno) FROM qs36f.slsbyccm WHERE SCCUNO not in  (4384,4385,4381) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH  between 1901 and 2101) totalclients,  
+                                (SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in (4384,4385,4381) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH between 1901 and 2101 ) totalcountries,  
+                                (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oemvendor, '' prpech
                                 from qs36f.inmsta Q inner join z on Q.imptn = z.wrkptn left join 
                                 (select dvpart, sum(dvonh#) onhand, sum(dvono#) onorder, max(dvprmg) vendor 
-                                from qs36f.dvinva where dvlocn in ('01', '05', '07','26') and trim(dvprmg) <> '' and dvonh# <= 0 and dvono# <= 0 group by dvpart) x on Q.imptn = x.dvpart  
+                                from qs36f.dvinva where dvlocn in ('01', '05', '07','26') and trim(dvprmg) = '' and dvonh# <= 0 and dvono# <= 0 group by dvpart) x on Q.imptn = x.dvpart  
                                 inner join qs36f.invptyf on Q.imptn = qs36f.invptyf.ippart
-                                where substr(ucase(trim(imdsc)),1,3) <> 'USE' and impc1 in ('01','03') /*and        
-                                (Q.IMQTE+Q.IMQT01+Q.IMQT02+Q.IMQT03+Q.IMQT04+ Q.IMQT05+Q.IMQT06+Q.IMQT07+Q.IMQT08+Q.IMQt09+ Q.IMQT10+Q.IMQT11+Q.IMQT12) > 0 */
-                                and (REGEXP_LIKE (x.vendor,'^[0-9]{2}$') /*Or (x.vendor = '')*/)
-                                /*and imptn not in (select whlpartn from qs36f.prdwl where whlstatus <> '')*/
+                                where substr(ucase(trim(imdsc)),1,3) <> 'USE' and impc1 in ('01','03')  
                                 and imptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')	 
-                                and imptn not in (select imptn from qs36f.inmstpat) 
-                                and imptn not in (select  whlpartn from qs36f.prdwl)
-                                --and (x.vendor = '' or  x.vendor in (130245,070118,150064,261903,265163,263939,263534,262673,262369,261339,060106))
-                                and (x.vendor = '' or  x.vendor in ({4}))
+                                and imptn not in (select imptn from qs36f.inmstpat)                                  
+                                and (not REGEXP_LIKE (coalesce(x.vendor, ''),'^[0-9]{2}$') or  x.vendor in ({4}))
+                                and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ('01','05','07','26') and (trim(dvprmg) <> '' or dvonh# > 0 or dvono# > 0 ))
                                 union
                                 select z.wrkptn imptn, coalesce(catdsc,coalesce(kodesc,'N/A'))
                                 imdsc, coalesce(imds2, 'N/A') imds2, coalesce(imds3, 'N/A') imds3,  
                                  0 qtysold, 0 onhand, 0 onorder, '' vendor,                         
                                 impc2, qt tquote, coalesce(catprc,coalesce(kopric,0)) imprc, z.TQ   
                                 Timesq, '' F20, '' Foem, 0 Ncus, impc1, imcata, (select mindes from 
-                                qs36f.mincodes where mincod = W.impc2) mindsc, '' vendorname, '' pagent, 0 wlist,
-                                0 project, '' projstatus, '' catdesc, '' subcatdesc                        
-                                , 0 totalclients, 0 totalcountry, '' oemvendor , '' prpech 
+                                qs36f.mincodes where mincod = W.impc2) mindsc, '' vendorname, '' pagent, 
+                                '' catdesc, '' subcatdesc, 0 totalclients, 0 totalcountries, '' oemvendor , '' prpech 
                                 from z left join qs36f.cater on z.wrkptn = catptn 
                                 left join qs36f.inmsta W on z.wrkptn = W.imptn    
                                 left join qs36f.komat on z.wrkptn = koptno 
-                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ('01', '05', '07','26'))
-                                and z.wrkptn not in (select whlpartn from qs36f.prdwl)) {3} "
+                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ('01', '05', '07','26'))) {3} "
         'FETCH FIRST 1000 ROWS ONLY
         'revisando aqui error en la query
 
