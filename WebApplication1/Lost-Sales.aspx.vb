@@ -993,7 +993,10 @@ Public Class Lost_Sales
                 .PROJECT = "",
                 .PROJSTATUS = "",
                 .PAGENT = row.Item("PAGENT").ToString(),
-                .PrPech = row.Item("PrPech").ToString()
+                .PrPech = row.Item("PrPech").ToString(),
+                .TotalClients = row.Item("totalclients").ToString(),
+                .TotalCountries = row.Item("totalcountries").ToString(),
+                .OEMPart = row.Item("oempart").ToString()
                 }).ToList()
 
             '.WLIST = row.Item("WLIST").ToString(),

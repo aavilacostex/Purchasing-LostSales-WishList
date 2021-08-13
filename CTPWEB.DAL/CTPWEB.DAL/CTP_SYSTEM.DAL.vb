@@ -170,7 +170,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 coalesce((SELECT INDESS FROM qs36f.INMCAS WHERE INSBCA = IMSBCA), '') subcatdesc,   
                                 (SELECT count(distinct sccuno) FROM qs36f.slsbyccm WHERE SCCUNO not in  ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH  between '{0}' and '{5}') totalclients,  
                                 (SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH between '{0}' and '{5}' ) totalcountries,  
-                                (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oemvendor, '' prpech
+                                (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oempart, '' prpech
                                 from qs36f.inmsta Q inner join z on Q.imptn = z.wrkptn left join 
                                 (select dvpart, sum(dvonh#) onhand, sum(dvono#) onorder, max(dvprmg) vendor 
                                 from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) = '' or trim(dvprmg) = '000000') and dvonh# <= 0 and dvono# <= 0) group by dvpart) x on Q.imptn = x.dvpart  
@@ -187,7 +187,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 impc2, qt tquote, coalesce(catprc,coalesce(kopric,0)) imprc, z.TQ   
                                 Timesq, '' F20, '' Foem, 0 Ncus, impc1, imcata, (select mindes from 
                                 qs36f.mincodes where mincod = W.impc2) mindsc, '' vendorname, '' pagent, 
-                                '' catdesc, '' subcatdesc, 0 totalclients, 0 totalcountries, '' oemvendor , '' prpech 
+                                '' catdesc, '' subcatdesc, 0 totalclients, 0 totalcountries, '' oempart , '' prpech 
                                 from z left join qs36f.cater on z.wrkptn = catptn 
                                 left join qs36f.inmsta W on z.wrkptn = W.imptn    
                                 left join qs36f.komat on z.wrkptn = koptno 
