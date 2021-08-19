@@ -1597,6 +1597,53 @@ Public Class CTP_SYSTEM : Implements IDisposable
         End Try
     End Function
 
+    Public Function GetLSBackData400(partNo As String, ByRef dsResult As DataSet) As Integer
+        Dim result As Integer = -1
+        dsResult = New DataSet()
+        Dim exMessage As String = " "
+        Try
+            Dim objDal = New DAL.CTP_SYSTEM()
+            dsResult = objDal.GetLSBackData400(partNo, dsResult)
+            If dsResult IsNot Nothing Then
+                If dsResult.Tables(0).Rows.Count > 0 Then
+                    result = dsResult.Tables(0).Rows.Count
+                End If
+            End If
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            Return result
+        End Try
+    End Function
+
+    Public Function InsertLSBackData400(objLS As LostSales, Optional externalStatus As String = Nothing) As Integer
+        Dim result As Integer = -1
+        Dim dsResult = New DataSet()
+        Dim exMessage As String = " "
+        Try
+            Dim objDal = New DAL.CTP_SYSTEM()
+            result = objDal.InsertLSBackData400(objLS, externalStatus)
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function UpdateLSBackData400(partNo As String, externalStatus As String, Optional user As String = Nothing) As Integer
+        Dim result As Integer = -1
+        Dim dsResult = New DataSet()
+        Dim exMessage As String = " "
+        Try
+            Dim objDal = New DAL.CTP_SYSTEM()
+            result = objDal.UpdateLSBackData400(partNo, externalStatus, user)
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            Return result
+        End Try
+    End Function
+
 #Region "DISPOSABLE"
 
     Protected Overridable Sub Dispose(disposing As Boolean)

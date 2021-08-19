@@ -427,12 +427,28 @@ Public Class Lost_Sales
         Try
             Dim dsData = DirectCast(Session("LostSaleData"), DataSet)
             lstData = fillObj(dsData.Tables(0))
-            Dim count1 = lstData.Count()
-            lstData.Remove(lstData.Single(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim()))
-            Dim count2 = lstData.Count()
+
+            ' tiene que ser com lsdata no con filter data para poder luego cargar todas referencias con ecepcipon de la recien eliminada.
+
+            For Each ls As LostSales In lstData
+                If LCase(ls.IMPTN.Trim()) = LCase(partno.Trim()) Then
+                    filterData.Add(ls)
+                End If
+            Next
+
+            Dim count1 = filterData.Count()
+
+            'Dim lstSelected = lstData.AsEnumerable().Where(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim()).ToList()
+            If filterData.Count = 1 Then
+                filterData.Remove(filterData.Single(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim()))
+            Else
+                filterData.Remove(filterData.Single(Function(da) (LCase(da.IMPTN).Trim() = LCase(partno).Trim()) And (da.PrPech.Trim() <> "")))
+            End If
+            'Dim pp = lstData.Single(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim())
+            Dim count2 = filterData.Count()
 
             If count1 > count2 Then
-                Dim dtResult = ListToDataTable(lstData)
+                Dim dtResult = ListToDataTable(filterData)
                 If dtResult IsNot Nothing Then
                     If dtResult.Rows.Count > 0 Then
                         Dim ds = New DataSet()
@@ -1170,15 +1186,16 @@ Public Class Lost_Sales
 
     End Function
 
-    Public Function GetLSBackData(partNo As String) As Boolean
+    Public Function GetLSBackData(partNo As String, Optional ByRef dsResult As DataSet = Nothing) As Boolean
         Dim exMessage As String = Nothing
-        Dim dsResult As New DataSet
+        dsResult = New DataSet
         Dim flag As Boolean = False
         Try
             Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
-                Dim rsData = objBL.GetLSBackData(partNo, dsResult)
+                'Dim rsData = objBL.GetLSBackData(partNo, dsResult)  -- sql method
+                Dim rsData = objBL.GetLSBackData400(partNo, dsResult)
                 If dsResult IsNot Nothing Then
-                    If dsResult.Tables(0) IsNot Nothing Then
+                    If dsResult.Tables(0).Rows.Count > 0 Then
                         flag = True
                     End If
                 End If
@@ -1192,7 +1209,28 @@ Public Class Lost_Sales
 
     End Function
 
-    Public Function SaveLSItemInProcess() As Integer
+    Public Function UpdateLSBackData400(partNo As String, externalStatus As String, Optional user As String = Nothing) As Integer
+        Dim exMessage As String = Nothing
+        'dsResult = New DataSet
+        Dim flag As Boolean = False
+        Dim rsData As Integer = -1
+        Try
+            Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
+                'Dim rsData = objBL.GetLSBackData(partNo, dsResult)  -- sql method
+                rsData = objBL.UpdateLSBackData400(partNo, externalStatus, user)
+                If rsData <= 0 Then
+                    'handle the updation success
+                End If
+            End Using
+            Return rsData
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, ex.Message, ex.ToString)
+            Return rsData
+        End Try
+    End Function
+
+    Public Function SaveLSItemInProcess(Optional externalStatus As String = Nothing) As Integer
         Dim objLS1 As LostSales = New LostSales()
         Dim lstObjLS As List(Of LostSales) = New List(Of LostSales)()
         Dim dctLS As Dictionary(Of String, String) = New Dictionary(Of String, String)()
@@ -1202,7 +1240,7 @@ Public Class Lost_Sales
             Dim dtPrepare As DataTable = dsData.Tables(0).Clone()
 
 
-            dctLS = DirectCast(Session("dctLostSaleData"), Dictionary(Of String, String))
+            dctLS = DirectCast(Session("dctSelectedParts"), Dictionary(Of String, String))
 
             For Each item In dctLS
                 Dim part As String = item.Key
@@ -1222,10 +1260,11 @@ Public Class Lost_Sales
 
             Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
                 For Each item1 In lstObjLS
-                    Dim result = objBL.SaveLSItemInProcess(item1)
+                    'Dim result = objBL.SaveLSItemInProcess(item1) -- save lostsale data sql server
+                    Dim result = objBL.InsertLSBackData400(item1, externalStatus)
                     'status when add to wish list
                     If result <= 0 Then
-
+                        'handle the insertion success
                     End If
                 Next
             End Using
@@ -3641,7 +3680,7 @@ Public Class Lost_Sales
                         SendMessage(methodMessage, messageType.warning)
                     Else
                         'process the data
-                        Session("dctLostSaleData") = lstReferences
+                        Session("dctSelectedParts") = lstReferences
                         Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
                             For Each item In lstReferences
                                 Dim result = objBL.InsertWishListReference(item.Value, item.Key, "1", "1", "QS36F.PRDWL", "WHLCODE")
@@ -3652,7 +3691,9 @@ Public Class Lost_Sales
                                     Dim flagExists = GetLSBackData(item.Key)
                                     If Not flagExists Then
                                         'if not, backup the part in process
-                                        Dim rsInsert = SaveLSItemInProcess()
+                                        Dim rsInsert = SaveLSItemInProcess("WSH")
+                                    Else
+                                        Dim rsUpdate = UpdateLSBackData400(item.Key, "WSH", item.Value)
                                     End If
 
                                     countReferences += 1
@@ -3689,13 +3730,13 @@ Public Class Lost_Sales
                 Dim ds As DataSet = New DataSet()
                 Dim row As GridViewRow = DirectCast(e.CommandSource, LinkButton).Parent.Parent
 
-                Dim dataFrom = row.Cells(3)
+                Dim dataFrom = row.Cells(2)
                 Dim myLabel As Label = DirectCast(dataFrom.FindControl("txtPartName"), Label)
 
                 Dim partNo As String = myLabel.Text.Trim()
-                Dim userid As String = If(Not String.IsNullOrEmpty(row.Cells(20).Text) And row.Cells(20).Text <> "&nbsp;", row.Cells(20).Text, "N/A")
+                Dim userid As String = If(Not String.IsNullOrEmpty(row.Cells(23).Text) And row.Cells(23).Text <> "&nbsp;", row.Cells(23).Text, "N/A")
                 lstReferences.Add(partNo, userid)
-                Session("dctLostSaleData") = lstReferences
+                Session("dctSelectedParts") = lstReferences
 
                 Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
 
@@ -3712,7 +3753,9 @@ Public Class Lost_Sales
                             Dim flagExists = GetLSBackData(partNo)
                             If Not flagExists Then
                                 'if not, backup the part in process
-                                Dim rsInsert = SaveLSItemInProcess()
+                                Dim rsInsert = SaveLSItemInProcess("WSH")
+                            Else
+                                Dim rsUpdate = UpdateLSBackData400(partNo, "WSH", userid)
                             End If
 
                             methodMessage = "Successful Insertion for " + result.ToString() + " record."
@@ -3743,16 +3786,23 @@ Public Class Lost_Sales
                 If tempDictionary.Count = 0 Then
                     Dim dataFrom = row.Cells(2)
                     Dim myLabel As Label = DirectCast(dataFrom.FindControl("txtPartName"), Label)
-                    Dim userid As String = If(Not String.IsNullOrEmpty(row.Cells(20).Text) And row.Cells(20).Text <> "&nbsp;", row.Cells(20).Text, "N/A")
+                    Dim userid As String = If(Not String.IsNullOrEmpty(row.Cells(23).Text) And row.Cells(23).Text <> "&nbsp;", row.Cells(23).Text, "N/A")
                     lblSelectedPart.Text = "The selected part is: " + myLabel.Text.Trim()
 
                     lstReferences.Add(myLabel.Text.Trim(), userid)
                     Session("dctSelectedParts") = lstReferences
-                Else
+                ElseIf tempDictionary.Count = 1 Then
                     lstReferences = tempDictionary
                     Session("dctSelectedParts") = lstReferences
+                    Dim pp = lstReferences.Keys(0)
+                    lblSelectedPart.Text = "The selected part is: " + pp.ToString().Trim()
                     hdShowUserAssignment.Value = "1"
                     ddlUser2.SelectedIndex = 0
+                Else
+                    methodMessage = "At this moment the application only assign users one by one. Please set the selection to one checkbox only."
+                    hdShowUserAssignment.Value = "0"
+                    ddlUser2.SelectedIndex = 0
+                    SendMessage(methodMessage, messageType.info)
                 End If
 
 
@@ -4367,16 +4417,31 @@ Public Class Lost_Sales
         Dim updatedReferences As Integer = 0
         Dim methodMessage As String = String.Empty
         Dim lstReferences As Dictionary(Of String, String) = New Dictionary(Of String, String)()
+        Dim partNo As String = Nothing
         Try
             'update the datasource
             'refresh the gridview
             Dim userSelected = DirectCast(Session("PERPECHUSER"), String)
             Dim ds As DataSet = New DataSet()
+            Dim ds1 As DataSet = New DataSet()
             ds = DirectCast(Session("LostSaleData"), DataSet)
             lstReferences = DirectCast(Session("dctSelectedParts"), Dictionary(Of String, String))
+            'Dim lstReferencesCopy = lstReferences
+
+            If lstReferences.Count > 1 Then
+                'Dim itt As Integer = 0
+                'For Each dc1 In lstReferences
+                '    Dim temp = lstReferencesCopy.Keys(itt)
+                '    lstReferencesCopy(temp) = userSelected
+                '    itt += 1
+                'Next
+            ElseIf lstReferences.Count > 0 And lstReferences.Count < 2 Then
+                Dim pp = lstReferences.Keys(0)
+                lstReferences(pp) = userSelected
+            End If
 
             If lstReferences.Count > 0 And lstReferences.Count < 2 Then
-                Dim partNo As String = LCase(lblSelectedPart.Text.Split(":")(1).ToString().Trim())
+                partNo = LCase(lblSelectedPart.Text.Split(":")(1).ToString().Trim())
                 For Each dw As DataRow In ds.Tables(0).Rows
                     If LCase(dw.Item("IMPTN").ToString().Trim()) = partNo Then
                         dw.Item("PrPech") = userSelected
@@ -4386,18 +4451,30 @@ Public Class Lost_Sales
                 ds.Tables(0).AcceptChanges()
                 loadData(ds)
             Else
+                Dim lengthdct = lstReferences.Count
+                Dim iterator = 0
                 For Each dc In lstReferences
                     Dim ptn = LCase(dc.Key.Trim())
+                    partNo = ptn
                     Dim usr = dc.Value
                     For Each dww As DataRow In ds.Tables(0).Rows
                         If LCase(dww.Item("IMPTN").ToString().Trim()) = ptn Then
                             dww.Item("PrPech") = userSelected
+                            iterator += 1
                             Exit For
                         End If
                     Next
                 Next
                 ds.Tables(0).AcceptChanges()
                 loadData(ds)
+            End If
+
+            Dim flagExists = GetLSBackData(partNo, ds1)
+            If Not flagExists Then
+                'if not, backup the part in process
+                Dim rsInsert = SaveLSItemInProcess()
+            Else
+                Dim rsUpdate = UpdateLSBackData400(partNo, "NEW", userSelected)
             End If
 
         Catch ex As Exception
@@ -4942,7 +5019,7 @@ Public Class Lost_Sales
             Dim checkAll As CheckBox = grvLostSales.HeaderRow.FindControl("chkAll")
             If checkAll.Checked Then
                 For Each gvr As GridViewRow In grvLostSales.Rows
-                    Dim userid As String = If(Not String.IsNullOrEmpty(gvr.Cells(20).Text) And gvr.Cells(20).Text <> "&nbsp;", gvr.Cells(20).Text, "N/A")
+                    Dim userid As String = If(Not String.IsNullOrEmpty(gvr.Cells(23).Text) And gvr.Cells(23).Text <> "&nbsp;", gvr.Cells(23).Text, "N/A")
                     lstPartsToWL.Add(Trim(gvr.Cells(2).Text), userid)
                     'lstPartsToWL.Add(Trim(gvr.Cells(2).Text))
                 Next
@@ -4950,7 +5027,7 @@ Public Class Lost_Sales
                 For Each gvr As GridViewRow In grvLostSales.Rows
                     Dim Check As CheckBox = gvr.FindControl("chkSingleAdd")
                     If Check.Checked Then
-                        Dim userid As String = If(Not String.IsNullOrEmpty(gvr.Cells(20).Text) And gvr.Cells(20).Text <> "&nbsp;", gvr.Cells(20).Text, "N/A")
+                        Dim userid As String = If(Not String.IsNullOrEmpty(gvr.Cells(23).Text) And gvr.Cells(23).Text <> "&nbsp;", gvr.Cells(23).Text, "N/A")
 
                         Dim dataFrom = gvr.Cells(2)
                         Dim myLabel As Label = DirectCast(dataFrom.FindControl("txtPartName"), Label)

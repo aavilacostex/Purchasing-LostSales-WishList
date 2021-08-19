@@ -170,7 +170,8 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 coalesce((SELECT INDESS FROM qs36f.INMCAS WHERE INSBCA = IMSBCA), '') subcatdesc,   
                                 (SELECT count(distinct sccuno) FROM qs36f.slsbyccm WHERE SCCUNO not in  ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH  between '{0}' and '{5}') totalclients,  
                                 (SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH between '{0}' and '{5}' ) totalcountries,  
-                                (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oempart, '' prpech
+                                (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oempart, 
+                                coalesce((select perpech from qs36f.LOSTSALESBCK LS where LS.imptn = Q.imptn and LS.EXTERNALSTS = 'NEW'), '') prpech
                                 from qs36f.inmsta Q inner join z on Q.imptn = z.wrkptn left join 
                                 (select dvpart, sum(dvonh#) onhand, sum(dvono#) onorder, max(dvprmg) vendor 
                                 from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) = '' or trim(dvprmg) = '000000') and dvonh# <= 0 and dvono# <= 0) group by dvpart) x on Q.imptn = x.dvpart  
@@ -180,6 +181,8 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 and imptn not in (select imptn from qs36f.inmstpat)                                  
                                 and (not REGEXP_LIKE (coalesce(x.vendor, ''),'^[0-9]{2}$') or  x.vendor in ({4}))
                                 and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) <> '' and trim(dvprmg) <> '000000') or dvonh# > 0 or dvono# > 0 ))
+                                and imptn not in (select imptn from qs36f.LOSTSALESBCK LS where LS.imptn = Q.imptn and LS.EXTERNALSTS = 'WSH') 
+                                and imptn not in (select  whlpartn from qs36f.prdwl)
                                 union
                                 select z.wrkptn imptn, coalesce(catdsc,coalesce(kodesc,'N/A'))
                                 imdsc, coalesce(imds2, 'N/A') imds2, coalesce(imds3, 'N/A') imds3,  
@@ -1752,6 +1755,75 @@ Public Class CTP_SYSTEM : Implements IDisposable
         End Try
 
     End Function
+
+#Region "Lost Sale Backed Data"
+
+    Public Function GetLSBackData400(partNo As String, ByRef dsResult As DataSet) As Data.DataSet
+        Dim exMessage As String = " "
+        Dim Sql As String
+        Dim result As Integer = -1
+        dsResult = New DataSet()
+        dsResult.Locale = CultureInfo.InvariantCulture
+        Try
+            Dim objDatos = New ClsRPGClientHelper()
+            Dim dt As DataTable = New DataTable()
+            Sql = "select * from qs36f.LOSTSALESBCK WHERE IMPTN = '" & Trim(UCase(partNo)) & "' "
+            result = objDatos.GetDataFromDatabase(Sql, dsResult, dt)
+            'result = objDatos.GetOdBcDataFromDatabase(Sql, dsResult)
+            Return dsResult
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            objLog.writeLog(strLogCadenaCabecera, objLog.ErrorTypeEnum.Exception, ex.Message, ex.ToString())
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function InsertLSBackData400(objLS As LostSales, Optional externalStatus As String = Nothing) As Integer
+        Dim exMessage As String = " "
+        Dim Sql As String
+        Dim affectedRows As Integer = -1
+        Try
+            Dim objDatos = New ClsRPGClientHelper()
+            Dim extSts = If(String.IsNullOrEmpty(externalStatus), "NEW", "WSH")
+            Sql = "INSERT INTO qs36f.LOSTSALESBCK(IMPTN,IMDSC,IMDSC2,IMDSC3,TQUOTE,TIMESQ,NCUS,QTYSOLD,VENDOR,VENDORNAME,PAGENT,IMPRC,WLIST,PROJECT,PROJSTATUS,
+		    F20,FOEM,IMPC1,CATDESC,IMPC2,MINDSC,TCOUNTRIES,OEMPART,SUBCATDESC,PERPECH,EXTERNALSTS) VALUES 
+            ('" & objLS.IMPTN & "', '" & objLS.IMDSC & "', '" & objLS.IMDS2 & "', '" & objLS.IMDS3 & "', '" & objLS.TQUOTE & "', '" & objLS.TIMESQ & "', '" & objLS.NCUS & "', '" & objLS.QTYSOLD & "'
+                    , '" & objLS.VENDOR & "', '" & objLS.VENDORNAME & "', '" & objLS.PAGENT & "', '" & objLS.IMPRC & "', '" & objLS.WLIST & "', '" & objLS.PROJECT & "', '" & objLS.PROJSTATUS & "'
+                    , '" & objLS.F20 & "', '" & objLS.FOEM & "', '" & objLS.IMPC1 & "', '" & objLS.CATDESC & "', '" & objLS.IMPC2 & "', '" & objLS.MINDSC & "', '" & objLS.TotalCountries & "', '" & objLS.OEMPart & "'
+                    , '" & objLS.SubCatDesc & "', '" & objLS.PrPech & "', '" & extSts & "')"
+            objDatos.InsertDataInDatabase(Sql, affectedRows)
+            Return affectedRows
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            objLog.writeLog(strLogCadenaCabecera, objLog.ErrorTypeEnum.Exception, ex.Message, ex.ToString())
+            Return affectedRows
+        End Try
+    End Function
+
+    Public Function UpdateLSBackData400(partNo As String, externalStatus As String, Optional user As String = Nothing) As Integer
+        Dim exMessage As String = Nothing
+        Dim Sql As String
+        Dim QueryResult As Integer = -1
+        Dim ds = New DataSet()
+        Dim affectedRows As Integer = -1
+        Try
+            Dim objDatos = New ClsRPGClientHelper()
+            Dim optSql = If(String.IsNullOrEmpty(user), "", " ,perpech = '" & user & "'")
+            Sql = "UPDATE qs36f.LOSTSALESBCK SET EXTERNALSTS = '" & externalStatus & "'" & optSql & " WHERE imptn  = '" & partNo & "' "
+
+            objDatos.UpdateDataInDatabase(Sql, affectedRows)
+            ' Dim affectedRows = objDatos.UpdateOdBcDataToDatabase(Sql)
+            'objDatos.InsertDataInDatabase(Sql, affectedRows)
+            Return affectedRows
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            objLog.writeLog(strLogCadenaCabecera, objLog.ErrorTypeEnum.Exception, ex.Message, ex.ToString())
+            Return QueryResult
+        End Try
+    End Function
+
+#End Region
+
 
 #Region "PDLogs-SQL"
 
