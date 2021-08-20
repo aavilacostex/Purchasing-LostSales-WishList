@@ -3925,12 +3925,14 @@ Public Class Wish_List
                     Dim statusquote = "D-" & status
 
                     Dim ds = objBL.CheckIfreferenceExistsinProj(projectId, partNo, vendorNo)
+                    Dim blHasValues = If(ds IsNot Nothing, True, False)
                     'test remove
-                    ds = Nothing
+                    'ds = Nothing
                     'test remove
 
-                    If ds IsNot Nothing Then
+                    If True And ds.Tables(0).Rows.Count > 0 Then
                         'part exists in project for this vendor  ???
+                        SendMessage("The project: " + projectId + " already have a reference with this Part Number and Vendor Number.", messageType.warning)
                     Else
 
                         If vendorNo <> "000000" Then
@@ -3998,11 +4000,11 @@ Public Class Wish_List
                                 End If
                             Else
                                 'rollback process
-                                Dim deletionAmount As Integer = 0
-                                Dim amountInHeader = objBL.GetReferencesInProject(projectId) ' check if the project have more than one reference
-                                If amountInHeader = 1 Then
-                                    objBL.DeletePDHeader(projectId, deletionAmount) ' delete header if more than one reference
-                                End If
+                                'Dim deletionAmount As Integer = 0
+                                'Dim amountInHeader = objBL.GetReferencesInProject(projectId) ' check if the project have more than one reference
+                                'If amountInHeader = 1 Then
+                                '    objBL.DeletePDHeader(projectId, deletionAmount) ' delete header if more than one reference
+                                'End If
 
                                 'show error message no insertion en detail
                                 flagResult = False

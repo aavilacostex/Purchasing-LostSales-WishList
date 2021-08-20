@@ -436,13 +436,16 @@ Public Class Lost_Sales
                 End If
             Next
 
-            Dim count1 = filterData.Count()
+            Dim filteredDataCount = filterData.Count()
+            Dim count1 = lstData.Count()
 
             'Dim lstSelected = lstData.AsEnumerable().Where(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim()).ToList()
             If filterData.Count = 1 Then
-                filterData.Remove(filterData.Single(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim()))
+                lstData.Remove(lstData.Single(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim()))
             Else
-                filterData.Remove(filterData.Single(Function(da) (LCase(da.IMPTN).Trim() = LCase(partno).Trim()) And (da.PrPech.Trim() <> "")))
+                'Dim withPrPech = 
+
+                lstData.Remove(lstData.Single(Function(da) (LCase(da.IMPTN).Trim() = LCase(partno).Trim()) And (da.PrPech.Trim() <> "")))
             End If
             'Dim pp = lstData.Single(Function(da) LCase(da.IMPTN).Trim() = LCase(partno).Trim())
             Dim count2 = filterData.Count()
@@ -3680,35 +3683,53 @@ Public Class Lost_Sales
                         SendMessage(methodMessage, messageType.warning)
                     Else
                         'process the data
+                        Dim ds1 As DataSet = New DataSet()
                         Session("dctSelectedParts") = lstReferences
                         Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
                             For Each item In lstReferences
-                                Dim result = objBL.InsertWishListReference(item.Value, item.Key, "1", "1", "QS36F.PRDWL", "WHLCODE")
-                                'status when add to wish list
-                                If result > 0 Then
 
-                                    'check if part is backed up before
-                                    Dim flagExists = GetLSBackData(item.Key)
-                                    If Not flagExists Then
-                                        'if not, backup the part in process
-                                        Dim rsInsert = SaveLSItemInProcess("WSH")
+                                Dim existsPart = objBL.GetPartInWishList(item.Key, ds1)
+                                Dim result As Integer = 0
+
+                                If existsPart = 0 Then
+                                    result = objBL.InsertWishListReference(item.Value, item.Key, "1", "1", "QS36F.PRDWL", "WHLCODE")
+                                    'status when add to wish list
+                                    If result > 0 Then
+
+                                        'check if part is backed up before
+                                        Dim flagExists = GetLSBackData(item.Key)
+                                        If Not flagExists Then
+                                            'if not, backup the part in process
+                                            Dim rsInsert = SaveLSItemInProcess("WSH")
+                                        Else
+                                            Dim rsUpdate = UpdateLSBackData400(item.Key, "WSH", item.Value)
+                                        End If
+
+                                        countReferences += 1
+                                        'Dim resultMethod = updateLostSaleGridView(item.Key, True)
+                                        'If resultMethod <> 0 Then
+                                        '    updateError += 1
+                                        'End If
+
                                     Else
-                                        Dim rsUpdate = UpdateLSBackData400(item.Key, "WSH", item.Value)
+                                        flagError += 1
                                     End If
-
-                                    countReferences += 1
-                                    Dim resultMethod = updateLostSaleGridView(item.Key, True)
-                                    If resultMethod <> 0 Then
-                                        updateError += 1
-                                    End If
-
-                                Else
-                                    flagError += 1
                                 End If
+
                             Next
                         End Using
 
                         Dim ds = DirectCast(Session("LostSaleData"), DataSet)
+                        Dim lsSel = DirectCast(Session("lstSelected"), List(Of String))
+
+                        Dim i = 0
+                        For Each item As String In lsSel
+                            If Not String.IsNullOrEmpty(item.Trim()) Then
+                                ds.Tables(0).Rows.RemoveAt(CInt(item) - i)
+                                i += 1
+                            End If
+                        Next
+
                         loadData(ds)
                         setDefaultValues(ds)
 
@@ -3718,9 +3739,9 @@ Public Class Lost_Sales
                         Else
                             Dim extraMessage = " Should be an error updating the gridview. Please refresh the data."
                             methodMessage = "Successful Insertion for " + countReferences.ToString() + " record."
-                            If updateError > 0 Then
-                                methodMessage += extraMessage
-                            End If
+                            'If updateError > 0 Then
+                            '    methodMessage += extraMessage
+                            'End If
                             SendMessage(methodMessage, messageType.success)
                         End If
                     End If
@@ -3760,21 +3781,29 @@ Public Class Lost_Sales
 
                             methodMessage = "Successful Insertion for " + result.ToString() + " record."
 
-                            Dim resultMethod = updateLostSaleGridView(partNo)
-                            If resultMethod = 0 Then
-                                SendMessage(methodMessage, messageType.success)
-                            End If
+                            Dim dss = DirectCast(Session("LostSaleData"), DataSet)
+                            dss.Tables(0).Rows.RemoveAt(CInt(e.CommandArgument))
+                            loadData(dss)
+
+                            'Dim resultMethod = updateLostSaleGridView(partNo)
+                            'If resultMethod = 0 Then
+                            SendMessage(methodMessage, messageType.success)
+                            'End If
                         Else
                             methodMessage = "There is an error in the insertion process."
                             SendMessage(methodMessage, messageType.Error)
                         End If
                     Else
-                        Dim resultMethod = updateLostSaleGridView(partNo)
-                        If resultMethod = 0 Then
-                            methodMessage = "There is already a reference of the part " + partNo.Trim() + " in Wishlist. This reference will be removed from this screen."
-                            SendMessage(methodMessage, messageType.warning)
-                        End If
-                        Exit Sub
+                        Dim dss = DirectCast(Session("LostSaleData"), DataSet)
+                        dss.Tables(0).Rows.RemoveAt(CInt(e.CommandArgument))
+                        loadData(dss)
+
+                        'Dim resultMethod = updateLostSaleGridView(partNo)
+                        'If resultMethod = 0 Then
+                        methodMessage = "There is already a reference of the part " + partNo.Trim() + " in Wishlist. This reference will be removed from this screen."
+                        SendMessage(methodMessage, messageType.warning)
+                        'End If
+                        'Exit Sub
                     End If
 
                 End Using
@@ -5015,16 +5044,19 @@ Public Class Lost_Sales
 
         Dim lstPartsToWL As Dictionary(Of String, String) = New Dictionary(Of String, String)()
         Dim exMessage As String = Nothing
+        Dim lstIndexes As List(Of String) = New List(Of String)()
         Try
             Dim checkAll As CheckBox = grvLostSales.HeaderRow.FindControl("chkAll")
             If checkAll.Checked Then
                 For Each gvr As GridViewRow In grvLostSales.Rows
                     Dim userid As String = If(Not String.IsNullOrEmpty(gvr.Cells(23).Text) And gvr.Cells(23).Text <> "&nbsp;", gvr.Cells(23).Text, "N/A")
                     lstPartsToWL.Add(Trim(gvr.Cells(2).Text), userid)
+                    lstIndexes.Add(gvr.RowIndex)
                     'lstPartsToWL.Add(Trim(gvr.Cells(2).Text))
                 Next
             Else
                 For Each gvr As GridViewRow In grvLostSales.Rows
+
                     Dim Check As CheckBox = gvr.FindControl("chkSingleAdd")
                     If Check.Checked Then
                         Dim userid As String = If(Not String.IsNullOrEmpty(gvr.Cells(23).Text) And gvr.Cells(23).Text <> "&nbsp;", gvr.Cells(23).Text, "N/A")
@@ -5033,10 +5065,11 @@ Public Class Lost_Sales
                         Dim myLabel As Label = DirectCast(dataFrom.FindControl("txtPartName"), Label)
 
                         lstPartsToWL.Add(myLabel.Text.Trim(), userid)
+                        lstIndexes.Add(gvr.RowIndex)
                     End If
                 Next
             End If
-
+            Session("lstSelected") = lstIndexes
             Return lstPartsToWL
         Catch ex As Exception
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString

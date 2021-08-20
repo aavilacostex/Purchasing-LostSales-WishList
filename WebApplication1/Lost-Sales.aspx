@@ -508,6 +508,7 @@
                                                     ID="lbSingleAdd"
                                                     runat="server"
                                                     TabIndex="1" CommandName="SingleAdd"
+                                                    CommandArgument="<%# CType(Container, GridViewRow).RowIndex %>"
                                                     ToolTip="Add Single Reference">
                                                     <span id="Span1" aria-hidden="true" runat="server">
                                                         <i class="fa fa-plus"></i></span>

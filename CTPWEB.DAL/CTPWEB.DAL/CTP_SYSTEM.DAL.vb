@@ -183,6 +183,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 and imptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) <> '' and trim(dvprmg) <> '000000') or dvonh# > 0 or dvono# > 0 ))
                                 and imptn not in (select imptn from qs36f.LOSTSALESBCK LS where LS.imptn = Q.imptn and LS.EXTERNALSTS = 'WSH') 
                                 and imptn not in (select  whlpartn from qs36f.prdwl)
+                                and trim(imdsc) <> ''
                                 union
                                 select z.wrkptn imptn, coalesce(catdsc,coalesce(kodesc,'N/A'))
                                 imdsc, coalesce(imds2, 'N/A') imds2, coalesce(imds3, 'N/A') imds3,  
@@ -194,7 +195,8 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 from z left join qs36f.cater on z.wrkptn = catptn 
                                 left join qs36f.inmsta W on z.wrkptn = W.imptn    
                                 left join qs36f.komat on z.wrkptn = koptno 
-                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}))) {3} "
+                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}))
+                                and trim(catdsc) <> '' and trim(kodesc) <> '' ) {3} "
         'FETCH FIRST 1000 ROWS ONLY
         'revisando aqui error en la query
 
