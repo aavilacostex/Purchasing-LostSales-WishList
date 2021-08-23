@@ -314,6 +314,19 @@ Public Class CTP_SYSTEM : Implements IDisposable
         End Try
     End Function
 
+    Public Function GetValidUsers(dpto As String, ByRef dsOut As DataSet) As Integer
+        Dim result As Integer = -1
+        Dim exMessage As String = " "
+        Try
+            Dim objDal = New DAL.CTP_SYSTEM()
+            result = objDal.GetValidUsers(dpto, dsOut)
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            Return result
+        End Try
+    End Function
+
 
 
 #End Region

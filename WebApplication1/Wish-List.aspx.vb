@@ -1,8 +1,11 @@
 ﻿Imports System.ComponentModel
 Imports System.Configuration
 Imports System.Data.OleDb
+Imports System.DirectoryServices.AccountManagement
 Imports System.Globalization
 Imports System.IO
+Imports System.Net
+Imports System.Net.Mail
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Web.Services
@@ -86,6 +89,7 @@ Public Class Wish_List
                     'Session("PageIndex") = 1
 
                     Session("NoPrivilegesUser") = Nothing
+                    Dim validUsers = ConfigurationManager.AppSettings("validUsersForWeb")
                     Session("PageSize") = If(Not String.IsNullOrEmpty(ConfigurationManager.AppSettings("PageSize")), ConfigurationManager.AppSettings("PageSize"), "1000")
                     Session("PageAmounts") = If(Not String.IsNullOrEmpty(ConfigurationManager.AppSettings("PageAmounts")), ConfigurationManager.AppSettings("PageAmounts"), "10")
                     Session("currentPage") = 1
@@ -93,6 +97,9 @@ Public Class Wish_List
                     Log.Info("loading combos")
                     LoadCombos()
                     Log.Info("Getting WL Data")
+
+                    Dim user = Session("userid").ToString().Trim()
+                    fullData = If(LCase(validUsers.Trim()).Contains(LCase(user.Trim())), True, False)
 
                     If Not fullData Then
 
@@ -2282,6 +2289,90 @@ Public Class Wish_List
 
 #Region "Generics"
 
+    Public Function GetUserEmailByUserId(userid As String) As String
+        Dim strLdap = "costex.com"
+        Dim userEmail As String = Nothing
+        Try
+            Using pc As PrincipalContext = New PrincipalContext(ContextType.Domain, strLdap)
+                Dim yourUser As UserPrincipal = UserPrincipal.FindByIdentity(pc, userid)
+                If yourUser IsNot Nothing Then
+                    userEmail = yourUser.EmailAddress.Trim().ToLower()
+                End If
+            End Using
+            Return userEmail
+        Catch ex As Exception
+            Return userEmail
+        End Try
+    End Function
+
+    Public Sub PrepareEmail(ByRef emailSent As Boolean, flag As String, Optional projectNoOut As String = Nothing, Optional vendorNoOut As String = Nothing)
+        emailSent = True
+        Try
+            Dim emailSender As String = ConfigurationManager.AppSettings("username").ToString()
+            Dim emailSenderPassword As String = ConfigurationManager.AppSettings("password").ToString()
+            Dim emailSenderHost As String = ConfigurationManager.AppSettings("smtp").ToString()
+            Dim emailSenderPort As String = ConfigurationManager.AppSettings("portnumber").ToString()
+            'Dim emailIsSSL As Boolean = CBool(ConfigurationManager.AppSettings("IsSSL").ToString())
+
+            Dim FileTemplate = Directory.GetFiles(Server.MapPath("~/EmailTemplates/"))
+            Dim str = New StreamReader(FileTemplate(0))
+            Dim Mailtext = str.ReadToEnd()
+            str.Close()
+
+            Dim projectNo = If(flag.Equals("1"), projectNoOut, txtSearchValue.Text.Trim())
+            Dim vendorNo = If(flag.Equals("1"), vendorNoOut, If(String.IsNullOrEmpty(Session("liSelected").ToString().Trim()), "", Session("liSelected").ToString()))
+
+            Mailtext = Mailtext.Replace("[user]", "aavila@costex.com")
+            Mailtext = Mailtext.Replace("[projectNo]", projectNo)
+            Mailtext = Mailtext.Replace("[partno]", txtPartNoPD.Text.Trim())
+            Mailtext = Mailtext.Replace("[vendorNo]", vendorNo)
+
+            Dim msg As MailMessage = New MailMessage()
+            msg.IsBodyHtml = True
+            msg.From = New MailAddress(emailSender)
+
+            Dim lstRec = PrepareRecipients()
+
+            For Each lsEmail As String In lstRec
+                msg.To.Add(lsEmail)
+            Next
+
+            Dim useridValue = ddlAssignedTo.SelectedItem.Text
+            Dim userEmail = GetUserEmailByUserId(useridValue)
+            'assign to recipients the person assigned
+            'msg.To.Add(userEmail)
+            msg.To.Add("aavila@costex.com")
+            msg.Subject = "Purchasing Notification."
+            msg.Body = Mailtext
+
+            Dim _smtp As SmtpClient = New SmtpClient()
+            _smtp.Host = emailSenderHost
+            _smtp.Port = emailSenderPort
+
+            Dim _newtwork As NetworkCredential = New NetworkCredential(emailSender, emailSenderPassword)
+            _smtp.Credentials = _newtwork
+
+            _smtp.Send(msg)
+
+        Catch ex As Exception
+            emailSent = False
+        End Try
+    End Sub
+
+    Private Function PrepareRecipients() As List(Of String)
+        Dim lstRecipients = New List(Of String)()
+        Try
+            'Dim recipients = ConfigurationManager.AppSettings("purcNotificatedUsers")
+            Dim recipients = ConfigurationManager.AppSettings("purcNotificatedUsersTest")
+            If recipients.Trim() IsNot Nothing Then
+                lstRecipients = recipients.Split(",").ToList()
+            End If
+            Return lstRecipients
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
     Protected Sub lnkLogout_Click() Handles lnkLogout.Click
         Try
             FormsAuthentication.SignOut()
@@ -2356,6 +2447,7 @@ Public Class Wish_List
                     Return flag
                 Else
                     lstPurcUsers = getAllPurcUsers()
+                    'lstPurcUsers.Add("AAVILA")
                     If lstPurcUsers.Count > 0 Then
                         'authUser = lstPurcUsers.AsEnumerable().Where(Function(val) UCase(val).Trim().Contains(user)).First()
                         For Each itm As String In lstPurcUsers
@@ -3758,7 +3850,7 @@ Public Class Wish_List
 
     End Sub
 
-    Public Sub SaveNewProject(ByRef flagResult As Boolean)
+    Public Sub SaveNewProject(ByRef flagResult As Boolean, Optional ByRef projectNoOut As String = Nothing, Optional ByRef vendorNoOut As String = Nothing)
         Dim exMessage As String = Nothing
         Dim status As String = Nothing
         flagResult = True
@@ -3804,6 +3896,9 @@ Public Class Wish_List
                                 'txtOEMPricePD.Text.Trim()
                                 If rsDetailInsertion > 0 Then
                                     'insert en poqota
+
+                                    vendorNoOut = vendorNo
+                                    projectNoOut = projectId
 
                                     Dim dsPoQota = objBL.GetPOQotaData(vendorNo, partNo)
                                     If dsPoQota IsNot Nothing Then
@@ -4036,6 +4131,9 @@ Public Class Wish_List
         Dim exMessage As String = Nothing
         Dim status As String = Nothing
         Dim flagResult As Boolean = True
+        Dim emailSent As Boolean = True
+        Dim projectNoOut As String = Nothing
+        Dim vendorNoOut As String = Nothing
 
         Try
             Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
@@ -4043,7 +4141,7 @@ Public Class Wish_List
                 'here begins to process in order of the selection insertion
                 'here continue the save process
                 If hdNewProj.Value = "1" Then
-                    SaveNewProject(flagResult)
+                    SaveNewProject(flagResult, projectNoOut, vendorNoOut)
                 Else
                     SaveExistingProject(flagResult)
                 End If
@@ -4052,6 +4150,10 @@ Public Class Wish_List
 
                     Dim rsUpdate = updateWishListGridView(txtPartNoPD.Text.Trim())
                     Dim rsUpdate1 = updateWishListBckGridView(txtPartNoPD.Text.Trim())
+
+                    Dim flag = hdNewProj.Value
+                    PrepareEmail(emailSent, flag, projectNoOut, vendorNoOut)
+                    'write log with email error
 
                     If rsUpdate >= 0 And rsUpdate1 >= 0 Then
                         hdNewProj.Value = "0"

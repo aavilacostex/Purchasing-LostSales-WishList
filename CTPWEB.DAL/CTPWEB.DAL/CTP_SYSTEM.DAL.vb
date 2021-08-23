@@ -195,14 +195,19 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 from z left join qs36f.cater on z.wrkptn = catptn 
                                 left join qs36f.inmsta W on z.wrkptn = W.imptn    
                                 left join qs36f.komat on z.wrkptn = koptno 
-                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}))
-                                and trim(catdsc) <> '' and trim(kodesc) <> '' ) {3} "
+                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6})
+                                and z.wrkptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')
+                                and substr(ucase(trim(imdsc)),1,3) <> 'USE' )
+                                 ) {3} "
+
+        'and trim(catdsc) <> '' and trim(kodesc) <> ''
         'FETCH FIRST 1000 ROWS ONLY
         'revisando aqui error en la query
 
         Dim yearUse = DateTime.Now().AddYears(-1).Year
+        Dim monthUse = DateTime.Now().Month()
         Dim yearUseCurrent = DateTime.Now().Year
-        Dim firstDate = New DateTime(yearUse, 1, 1)
+        Dim firstDate = New DateTime(yearUse, monthUse, 1)
         Dim firstDateCurrent = New DateTime(yearUseCurrent, 1, 1)
         Dim strDate As String = firstDate.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
         'Dim strDateCurrent As String = firstDateCurrent.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
@@ -398,6 +403,22 @@ Public Class CTP_SYSTEM : Implements IDisposable
         Try
             Dim objDatos = New ClsRPGClientHelper()
             result = objDatos.GetSingleDataScalar(sql)
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            objLog.writeLog(strLogCadenaCabecera, objLog.ErrorTypeEnum.Exception, ex.Message, ex.ToString())
+            Return result
+        End Try
+    End Function
+
+    Public Function GetValidUsers(dpto As String, ByRef dsOut As DataSet) As Integer
+        Dim exMessage As String = Nothing
+        Dim result As Integer = -1
+        Try
+            Dim sql = "SELECT * FROM QS36F.CSUSER WHERE TRIM(DECODE) = '" + dpto + "' AND TRIM(USPTY9) = ''"
+            Dim objDatos = New ClsRPGClientHelper()
+            Dim dt As DataTable = New DataTable()
+            result = objDatos.GetDataFromDatabase(sql, dsOut, dt)
             Return result
         Catch ex As Exception
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString

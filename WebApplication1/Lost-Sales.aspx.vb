@@ -2684,12 +2684,13 @@ Public Class Lost_Sales
         Dim lstVendors As List(Of LostSales) = New List(Of LostSales)()
         Dim lstSelectedCVData As List(Of LostSales) = New List(Of LostSales)()
         Dim lstSelectedNVData As List(Of LostSales) = New List(Of LostSales)()
+        Dim methodMessage As String = Nothing
         Try
             If ds IsNot Nothing Then
                 lstVendors = fillObj(ds.Tables(0))
 
                 For Each obj As LostSales In lstVendors
-                    If Not String.IsNullOrEmpty(obj.VENDOR) Then
+                    If Not String.IsNullOrEmpty(obj.VENDOR.Trim()) And obj.VENDOR.Trim() <> "000000" Then
                         lstSelectedCVData.Add(obj)
                     Else
                         lstSelectedNVData.Add(obj)
@@ -2718,31 +2719,56 @@ Public Class Lost_Sales
                     If selection.Equals("1") Then 'with vendor    
 
                         Dim ds1 = DirectCast(Session("CVendor"), DataSet)
-                        Dim myitem = ds1.Tables(0).AsEnumerable().Where(Function(item) CInt(item.Item("TIMESQ").ToString()) >= CInt(qty)).AsEnumerable().ToList()
-                        If myitem.Count > 0 Then
-                            dsOut = ListToDataTableDr(myitem)
+                        If ds1 IsNot Nothing Then
+                            If ds1.Tables(0).Rows.Count > 0 Then
+                                Dim myitem = ds1.Tables(0).AsEnumerable().Where(Function(item) CInt(item.Item("TIMESQ").ToString()) >= CInt(qty)).AsEnumerable().ToList()
+                                If myitem.Count > 0 Then
+                                    dsOut = ListToDataTableDr(myitem)
+                                End If
+                                Session("LostSaleData") = dsOut
+                            Else
+                                Session("LostSaleData") = Nothing
+                                methodMessage = "There is not data for the current selection."
+                                SendMessage(methodMessage, messageType.warning)
+                            End If
+                        Else
+                            Session("LostSaleData") = Nothing
+                            methodMessage = "There is not data for the current selection."
+                            SendMessage(methodMessage, messageType.warning)
                         End If
-                        Session("LostSaleData") = dsOut
+
                         'setDefaultValues(dsOut)
 
                     ElseIf selection.Equals("2") Then ' without vendor     
 
                         Dim ds1 = DirectCast(Session("NVendor"), DataSet)
                         writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Count ds1", ds1.Tables(0).Rows.Count.ToString())
-                        Dim myitem = ds1.Tables(0).AsEnumerable().Where(Function(item) CInt(item.Item("TIMESQ").ToString()) >= CInt(qty)).AsEnumerable().ToList()
-                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Count myitem", myitem.Count.ToString())
-                        If myitem.Count > 0 Then
-                            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Validacion", "Entro en la condicion de timesq")
-                            dsOut = ListToDataTableDr(myitem)
+
+                        If ds1 IsNot Nothing Then
+                            If ds1.Tables(0).Rows.Count > 0 Then
+                                Dim myitem = ds1.Tables(0).AsEnumerable().Where(Function(item) CInt(item.Item("TIMESQ").ToString()) >= CInt(qty)).AsEnumerable().ToList()
+                                writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Count myitem", myitem.Count.ToString())
+                                If myitem.Count > 0 Then
+                                    writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Validacion", "Entro en la condicion de timesq")
+                                    dsOut = ListToDataTableDr(myitem)
+                                End If
+                                'If dsOut IsNot Nothing Then
+                                Session("LostSaleData") = dsOut
+                                'Else
+                                'Session("LostSaleData") = New DataSet()
+                                'End If
+
+                                'setDefaultValues(dsOut)
+                            Else
+                                Session("LostSaleData") = Nothing
+                                methodMessage = "There is not data for the current selection."
+                                SendMessage(methodMessage, messageType.warning)
+                            End If
+                        Else
+                            Session("LostSaleData") = Nothing
+                            methodMessage = "There is not data for the current selection."
+                            SendMessage(methodMessage, messageType.warning)
                         End If
-                        'If dsOut IsNot Nothing Then
-                        Session("LostSaleData") = dsOut
-                        'Else
-                        'Session("LostSaleData") = New DataSet()
-                        'End If
-
-                        'setDefaultValues(dsOut)
-
                     Else
                         Session("LostSaleData") = Session("LostSaleBck")
                     End If
