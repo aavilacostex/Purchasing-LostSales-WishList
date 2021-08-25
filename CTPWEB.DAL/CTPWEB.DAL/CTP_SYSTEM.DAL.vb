@@ -208,7 +208,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
         Dim monthUse = DateTime.Now().Month()
         Dim yearUseCurrent = DateTime.Now().Year
         Dim firstDate = New DateTime(yearUse, monthUse, 1)
-        Dim firstDateCurrent = New DateTime(yearUseCurrent, 1, 1)
+        Dim firstDateCurrent = New DateTime(yearUseCurrent, monthUse, 1)
         Dim strDate As String = firstDate.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
         'Dim strDateCurrent As String = firstDateCurrent.ToString("yyMMdd", System.Globalization.CultureInfo.InvariantCulture)
         Dim strDateReduc As String = firstDate.ToString("yyMM", System.Globalization.CultureInfo.InvariantCulture)

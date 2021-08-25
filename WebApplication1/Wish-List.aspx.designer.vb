@@ -122,15 +122,6 @@ Partial Public Class Wish_List
     Protected WithEvents pnFilters As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''rdStatus control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rdStatus As Global.System.Web.UI.WebControls.RadioButton
-
-    '''<summary>
     '''rdFrom control.
     '''</summary>
     '''<remarks>
@@ -147,6 +138,15 @@ Partial Public Class Wish_List
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rdAssigment As Global.System.Web.UI.WebControls.RadioButton
+
+    '''<summary>
+    '''rdStatus control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rdStatus As Global.System.Web.UI.WebControls.RadioButton
 
     '''<summary>
     '''pnFilterCriteria control.
@@ -2073,6 +2073,15 @@ Partial Public Class Wish_List
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents hdBeginNotification As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''hdHideDDLAssign control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hdHideDDLAssign As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''hdNewProj control.

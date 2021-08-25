@@ -284,11 +284,11 @@ Public Class Wish_List
         Try
             Dim dctValues = New Dictionary(Of String, String)()
             dctValues.Add("OPEN", "1")
-            dctValues.Add("DOCUMENTATION", "2")
+            'dctValues.Add("DOCUMENTATION", "2")
             dctValues.Add("TO DEVELOP", "3")
-            dctValues.Add("RE-OPEN", "4")
-            dctValues.Add("MOVED TO DEV", "5")
-            dctValues.Add("REJECTED", "6")
+            'dctValues.Add("RE-OPEN", "4")
+            'dctValues.Add("MOVED TO DEV", "5")
+            dctValues.Add("RE-ASSIGN", "6")
 
             'Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
             '    ds = objBL.GetAllWLStatuses()

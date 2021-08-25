@@ -3619,15 +3619,6 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:WebApplication1.Wish_List._rdStatus">
-<summary>
-rdStatus control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
 <member name="F:WebApplication1.Wish_List._rdFrom">
 <summary>
 rdFrom control.
@@ -3640,6 +3631,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._rdAssigment">
 <summary>
 rdAssigment control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._rdStatus">
+<summary>
+rdStatus control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -5566,6 +5566,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._hdBeginNotification">
 <summary>
 hdBeginNotification control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdHideDDLAssign">
+<summary>
+hdHideDDLAssign control.
 </summary>
 <remarks>
 Auto-generated field.
