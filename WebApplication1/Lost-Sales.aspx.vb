@@ -1,5 +1,8 @@
 ﻿Imports System.ComponentModel
+Imports System.DirectoryServices.AccountManagement
 Imports System.IO
+Imports System.Net
+Imports System.Net.Mail
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Threading
@@ -239,6 +242,101 @@ Public Class Lost_Sales
 #End Region
 
 #Region "Generics"
+
+#Region "Email Proccess"
+
+    Public Sub PrepareEmail(userSelected As String, partNo As String, ByRef emailSent As Boolean)
+        emailSent = True
+        Try
+            Dim emailSender As String = ConfigurationManager.AppSettings("username").ToString()
+            Dim emailSenderPassword As String = ConfigurationManager.AppSettings("password").ToString()
+            Dim emailSenderHost As String = ConfigurationManager.AppSettings("smtp").ToString()
+            Dim emailSenderPort As String = ConfigurationManager.AppSettings("portnumber").ToString()
+            'Dim emailIsSSL As Boolean = CBool(ConfigurationManager.AppSettings("IsSSL").ToString())
+
+            Dim FileTemplate = Directory.GetFiles(Server.MapPath("~/EmailTemplates/"))
+            Dim pathToProccess As String = Nothing
+            For Each item As String In FileTemplate
+                If LCase(item).Contains("lostsale") Then
+                    pathToProccess = item
+                    Exit For
+                End If
+            Next
+            Dim str = New StreamReader(pathToProccess)
+            Dim Mailtext = str.ReadToEnd()
+            str.Close()
+
+            Mailtext = Mailtext.Replace("[user]", "aavila@costex.com")
+            Mailtext = Mailtext.Replace("[partno]", partNo)
+            Mailtext = Mailtext.Replace("[userselected]", userSelected)
+
+            Dim msg As MailMessage = New MailMessage()
+            msg.IsBodyHtml = True
+            msg.From = New MailAddress(emailSender)
+
+            Dim lstRec = PrepareRecipients()
+
+            For Each lsEmail As String In lstRec
+                msg.To.Add(lsEmail)
+            Next
+
+            Dim username As String = Nothing
+            Dim userEmail = If(Not userSelected.Contains("N/A"), GetUserEmailByUserId(userSelected.Trim(), username), "")
+            'assign to recipients the person assigned
+
+            If Not String.IsNullOrEmpty(userEmail.Trim()) Then
+                Mailtext = Mailtext.Replace("[username]", username)
+                'msg.To.Add(userEmail)
+                msg.To.Add("aavila@costex.com")
+            End If
+
+            msg.Subject = "Purchasing Notification."
+            msg.Body = Mailtext
+
+            Dim _smtp As SmtpClient = New SmtpClient()
+            _smtp.Host = emailSenderHost
+            _smtp.Port = emailSenderPort
+
+            Dim _newtwork As NetworkCredential = New NetworkCredential(emailSender, emailSenderPassword)
+            _smtp.Credentials = _newtwork
+
+            _smtp.Send(msg)
+
+        Catch ex As Exception
+            emailSent = False
+        End Try
+    End Sub
+    Private Function PrepareRecipients() As List(Of String)
+        Dim lstRecipients = New List(Of String)()
+        Try
+            'Dim recipients = ConfigurationManager.AppSettings("purcNotificatedUsers")
+            Dim recipients = ConfigurationManager.AppSettings("purcNotificatedUsersTest")
+            If recipients.Trim() IsNot Nothing Then
+                lstRecipients = recipients.Split(",").ToList()
+            End If
+            Return lstRecipients
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+    Public Function GetUserEmailByUserId(userid As String, Optional ByRef username As String = Nothing) As String
+        Dim strLdap = "costex.com"
+        Dim userEmail As String = Nothing
+        Try
+            Using pc As PrincipalContext = New PrincipalContext(ContextType.Domain, strLdap)
+                Dim yourUser As UserPrincipal = UserPrincipal.FindByIdentity(pc, userid)
+                If yourUser IsNot Nothing Then
+                    userEmail = yourUser.EmailAddress.Trim().ToLower()
+                    username = yourUser.Name.ToString()
+                End If
+            End Using
+            Return userEmail
+        Catch ex As Exception
+            Return userEmail
+        End Try
+    End Function
+
+#End Region
 
     Public Function IsFileinUse(file As FileInfo) As Boolean
         Dim exMessage As String = Nothing
@@ -3701,6 +3799,7 @@ Public Class Lost_Sales
         Dim countReferences As Integer = 0
         Dim flagError As Integer = 0
         Dim updateError As Integer = 0
+        Dim emailSent As Boolean = False
         Try
             If e.CommandName = "AddAll" Then
                 lstReferences = GetCheckboxesDisp()
@@ -3748,6 +3847,12 @@ Public Class Lost_Sales
 
                                         dss.Tables(0).Rows.RemoveAt(rowIndex)
                                         loadData(dss)
+
+                                        PrepareEmail(item.Value, item.Key, emailSent)
+                                        If Not emailSent Then
+                                            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Lost Sale Notification Email Trace Log. Part Reported: " + item.Key.ToUpper() + ". User assigned: " + item.Value +
+                                                     ". The email could not be send . Running by user: " + Session("userid").ToString(), "Login at time: " + DateTime.Now.ToString())
+                                        End If
 
                                     Else
                                         flagError += 1
@@ -3830,6 +3935,12 @@ Public Class Lost_Sales
 
                             dss.Tables(0).Rows.RemoveAt(rowIndex)
                             loadData(dss)
+
+                            PrepareEmail(userid, partNo, emailSent)
+                            If Not emailSent Then
+                                writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Lost Sale Notification Email Trace Log. Part Reported: " + partNo.ToUpper() + ". User assigned: " + userid +
+                                             ". The email could not be send . Running by user: " + Session("userid").ToString(), "Login at time: " + DateTime.Now.ToString())
+                            End If
 
                             'dss.Tables(0).Rows.RemoveAt(CInt(e.CommandArgument))
                             'loadData(dss)
@@ -4606,6 +4717,7 @@ Public Class Lost_Sales
                     Dim count As Integer = 0
                     Dim countError As Integer = 0
                     Dim strPtnErrors As String = String.Empty
+                    Dim emailSent As Boolean = False
 
                     For Each tows As String In lstParts
 
@@ -4637,6 +4749,12 @@ Public Class Lost_Sales
 
                                 dss.Tables(0).Rows.RemoveAt(rowIndex)
                                 loadData(dss)
+
+                                PrepareEmail(userSelected, tows, emailSent)
+                                If Not emailSent Then
+                                    writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Lost Sale Notification Email Trace Log. Part Reported: " + tows.ToUpper() + ". User assigned: " + userSelected +
+                                             ". The email could not be send . Running by user: " + Session("userid").ToString(), "Login at time: " + DateTime.Now.ToString())
+                                End If
 
                             Else
                                 'log error
