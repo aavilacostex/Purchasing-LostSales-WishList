@@ -95,15 +95,6 @@ Partial Public Class Lost_Sales
     Protected WithEvents tqr10 As Global.System.Web.UI.WebControls.RadioButton
 
     '''<summary>
-    '''tqr30 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tqr30 As Global.System.Web.UI.WebControls.RadioButton
-
-    '''<summary>
     '''tqr50 control.
     '''</summary>
     '''<remarks>
@@ -120,6 +111,15 @@ Partial Public Class Lost_Sales
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents tqr100 As Global.System.Web.UI.WebControls.RadioButton
+
+    '''<summary>
+    '''tqr200 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tqr200 As Global.System.Web.UI.WebControls.RadioButton
 
     '''<summary>
     '''lbltqId control.
@@ -194,15 +194,6 @@ Partial Public Class Lost_Sales
     Protected WithEvents rdCategory As Global.System.Web.UI.WebControls.RadioButton
 
     '''<summary>
-    '''rdVndName control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rdVndName As Global.System.Web.UI.WebControls.RadioButton
-
-    '''<summary>
     '''rdMajor control.
     '''</summary>
     '''<remarks>
@@ -210,6 +201,15 @@ Partial Public Class Lost_Sales
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rdMajor As Global.System.Web.UI.WebControls.RadioButton
+
+    '''<summary>
+    '''rdVndName control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rdVndName As Global.System.Web.UI.WebControls.RadioButton
 
     '''<summary>
     '''rdWL control.
@@ -327,6 +327,24 @@ Partial Public Class Lost_Sales
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents ddlUser2 As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''chkToWS control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkToWS As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''lblToWS control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblToWS As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''btnUpdate3 control.

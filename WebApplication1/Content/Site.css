@@ -281,6 +281,10 @@ table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
     text-align: right !important;
 }
 
+#MainContent_lblSelectedPart {
+    word-break: break-all !important;
+}
+
 /*#rowGridView th span input {
     margin: 2px 0 2px 18px !important;    
 }*/

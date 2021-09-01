@@ -181,15 +181,6 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:WebApplication1.Lost_Sales._tqr30">
-<summary>
-tqr30 control.
-</summary>
-<remarks>
-Auto-generated field.
-To modify move field declaration from designer file to code-behind file.
-</remarks>
-</member>
 <member name="F:WebApplication1.Lost_Sales._tqr50">
 <summary>
 tqr50 control.
@@ -202,6 +193,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Lost_Sales._tqr100">
 <summary>
 tqr100 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._tqr200">
+<summary>
+tqr200 control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -280,18 +280,18 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:WebApplication1.Lost_Sales._rdVndName">
+<member name="F:WebApplication1.Lost_Sales._rdMajor">
 <summary>
-rdVndName control.
+rdMajor control.
 </summary>
 <remarks>
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:WebApplication1.Lost_Sales._rdMajor">
+<member name="F:WebApplication1.Lost_Sales._rdVndName">
 <summary>
-rdMajor control.
+rdVndName control.
 </summary>
 <remarks>
 Auto-generated field.
@@ -409,6 +409,24 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Lost_Sales._ddlUser2">
 <summary>
 ddlUser2 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._chkToWS">
+<summary>
+chkToWS control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Lost_Sales._lblToWS">
+<summary>
+lblToWS control.
 </summary>
 <remarks>
 Auto-generated field.

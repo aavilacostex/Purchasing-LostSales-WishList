@@ -195,9 +195,10 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 from z left join qs36f.cater on z.wrkptn = catptn 
                                 left join qs36f.inmsta W on z.wrkptn = W.imptn    
                                 left join qs36f.komat on z.wrkptn = koptno 
-                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6})
+                                where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}))
                                 and z.wrkptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')
-                                and substr(ucase(trim(imdsc)),1,3) <> 'USE' )
+                                and substr(ucase(trim(imdsc)),1,3) <> 'USE'
+                                and z.wrkptn not in (select  whlpartn from qs36f.prdwl)
                                  ) {3} "
 
         'and trim(catdsc) <> '' and trim(kodesc) <> ''
