@@ -56,7 +56,7 @@
                         <div id="loadOptions" class="col-md-4">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <asp:LinkButton ID="btnNewItem" class="boxed-btn-layout btn-rounded" runat="server" >
+                                    <asp:LinkButton ID="btnNewItem" class="boxed-btn-layout btn-rounded hideProp" runat="server" >
                                                             <i class="fa fa-plus fa-1x"" aria-hidden="true"> </i> NEW ITEM
                                                         </asp:LinkButton>
                                 </div>
@@ -126,16 +126,9 @@
                     <div class="col-md-3"> 
                         <asp:Panel ID="pnFilters" CssClass="pnFilterStyles" GroupingText="FILTERS" runat="server">
                             <div id="rowRadios1" class="form-group col-md-12">
-                                <div class="row">
-                                    <div class="form-group col-md-6 radio-toolbar">
-                                        <label class="form-check">
-                                            <p>Status</p>
-                                            <asp:RadioButton ID="rdStatus" OnCheckedChanged="rdStatus_CheckedChanged" onclick="yesnoCheck('rowStatus');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
+                                <div class="row hideProp">                                   
 
-                                    <div class="form-group col-md-6 radio-toolbar">
+                                    <div class="form-group col-md-6 radio-toolbar hideProp">
                                         <label class="form-check">
                                             <p>From</p>
                                             <asp:RadioButton ID="rdFrom" OnCheckedChanged="rdFrom_CheckedChanged" onclick="javascript:yesnoCheck('rowFrom');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
@@ -144,8 +137,8 @@
                                     </div>
                                 </div>
 
-                                <div id="rwAssigment" class="row">
-                                    <div class="form-group col-md-6 radio-toolbar">
+                                <div id="rwAssigment" class="row" style="display: flex !important;">
+                                    <div class="form-group col-md-6 radio-toolbar hideProp">
                                         <label class="form-check">
                                             <p>Assigment</p>
                                             <asp:RadioButton ID="rdAssigment" OnCheckedChanged="rdAssigment_CheckedChanged" onclick="yesnoCheck('rowAssigment');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
@@ -153,13 +146,13 @@
                                         </label>
                                     </div>
 
-                                    <%--<div class="form-group col-md-6 radio-toolbar">
-                                                        <label class="form-check">
-                                                            <p>  </p>
-                                                            <asp:RadioButton ID="rdWL" OnCheckedChanged="rdWL_CheckedChanged" onclick="yesnoCheck('rowWL');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
-                                                            <span class="checkmark"></span>
-                                                        </label>
-                                                    </div>--%>
+                                    <div class="form-group col-md-6 radio-toolbar">
+                                        <label class="form-check">
+                                            <p>Status</p>
+                                            <asp:RadioButton ID="rdStatus" OnCheckedChanged="rdStatus_CheckedChanged" onclick="yesnoCheck('rowStatus');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
                                 </div>
 
                             </div>
@@ -195,7 +188,7 @@
                                 </div>
                             </div>
                             <!--search by VendorName-->
-                            <div id="rowFrom" class="rowVndName" style="display: none;">
+                            <div id="rowFrom" class="rowVndName hideProp" style="display: none;">
                                 <div class="col-md-2"></div>
                                 <div class="col-md-10">
                                     <label for="sel-vndassigned">From</label>
@@ -600,7 +593,13 @@
                                     <asp:Label ID="lblStatus3" CssClass="label-style" Text="status" runat="server"></asp:Label>
                                     <asp:DropDownList ID="ddlStatus3" OnSelectedIndexChanged="ddlStatus3_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" EnableViewState="true" ViewStateMode="Enabled" runat="server" />
                                 </div>
-                            </div>                    
+                            </div> 
+                            <div class="form-row" style="padding: 0 25px 10px 25px;">
+                                <div class="form-group col-md-12">
+                                    <asp:Label ID="lblReason" CssClass="label-style" Text="unaccepted reason" runat="server"></asp:Label>
+                                    <asp:TextBox ID="txtReason" Enabled="false" CssClass="form-control fullTextBox" TextMode="MultiLine" runat="server"></asp:TextBox>
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6" style="float: right; text-align: right !important;">
                                     <asp:Button ID="btnUpdate3" Text="update" class="btn btn-primary btn-lg btnMidSize" OnClick="btnUpdate3_Click" runat="server" />
@@ -967,7 +966,7 @@
                             <div class="col-xs-12 col-sm-2 flex-item-1 padd-fixed">
                                 <asp:Button ID="btnExcel" class="btn btn-primary btn-lg float-right btnFullSize" OnClick="btnExcel_Click" runat="server" Text="Excel" />
                             </div>
-                            <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed">
+                            <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed hideProp">
                                 <asp:Button ID="btnPdf" class="btn btn-primary btn-lg btnFullSize" runat="server" Text="Pdf" />
                             </div>
                             <div class="col-xs-12 col-sm-2 flex-item-3 padd-fixed hideProp">
@@ -1049,12 +1048,15 @@
                 <asp:HiddenField ID="hdSessionToCheckTimeOut" value="" runat="server" />
                 <asp:HiddenField ID="hdBeginNotification" value="" runat="server" />
 
+                <asp:HiddenField ID="hdHideDDLAssign" value="0" runat="server" />
+
                 <asp:HiddenField ID="hdNewProj" value="0" runat="server" />
                 <asp:HiddenField ID="hdExistProj" value="0" runat="server" />
 
                 <asp:HiddenField ID="hdDifVnd" value="" runat="server" />
 
                 <asp:HiddenField id="hdWelcomeMess" Value="" runat="server" />
+                <asp:HiddenField id="hdGetSelectedStatus" Value="" runat="server" />
             </div>
 
             <div class="row" style="display: none !important;">
@@ -1274,6 +1276,20 @@
                 divId.className = "collapse"
             }
         }
+
+        $('body').on('change', "#<%=ddlStatus3.ClientID %>", function () {
+            debugger
+
+            var value = document.getElementById("<%=ddlStatus3.ClientID %>");
+            var gettext = value.options[value.selectedIndex].text;
+            var getindex = value.options[value.selectedIndex].value;
+
+            $('#<%=hdGetSelectedStatus.ClientID %>').val(getindex);
+
+            var value1 = document.getElementById("<%=ddlUser2.ClientID %>").id;
+            //$('#<%=hdGetSelectedStatus.ClientID %>').val(value1);
+
+        });
 
         //$('body').on('click', '#accordion_2 h5 a', function () {
         //    //debugger
@@ -1626,8 +1642,10 @@
 
             var hdFile = document.getElementById('<%=hdUpdateMedRefFlag.ClientID%>').value
             if (hdFile == "1") {
-                $('#<%=hdUpdateMedRefFlag.ClientID %>').val("0")
-                $('#<%=hdProdDevFlag.ClientID %>').val("0")
+                $('#<%=hdUpdateMedRefFlag.ClientID %>').val("0");
+                $('#<%=hdProdDevFlag.ClientID %>').val("0");
+
+                $("#MainContent_txtReason").val("");
             }
         });
         
@@ -2396,6 +2414,16 @@
             fillPartInfo();
 
             fixFooterColumns();
+
+
+            var hdSelSts = document.getElementById('<%=hdGetSelectedStatus.ClientID%>').value
+            if (hdSelSts == "6") {
+                debugger
+
+                $("#MainContent_txtReason").attr("disabled", false);
+                $("#MainContent_txtReason").prop("disabled", false);
+            }
+            
             //$('.footer-style').children("td:contains(' ')").addClass('hidecol');
 
             //var collapse1 = document.getElementById('collapseOne');

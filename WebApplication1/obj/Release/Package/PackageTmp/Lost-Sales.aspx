@@ -97,14 +97,7 @@
                                         <asp:RadioButton ID="tqr10" GroupName="radio" OnCheckedChanged="tqr10_CheckedChanged" AutoPostBack="true" runat="server"></asp:RadioButton>
                                         <span class="checkmark"></span>
                                     </label>
-                                </div>
-                                <div class="form-group col-md-3 radio-toolbar">
-                                    <label class="form-check">
-                                        <p>30+</p>
-                                        <asp:RadioButton ID="tqr30" GroupName="radio" OnCheckedChanged="tqr30_CheckedChanged" AutoPostBack="true" runat="server"></asp:RadioButton>
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
+                                </div>                                
                                 <div class="form-group col-md-3 radio-toolbar">
                                     <label class="form-check">
                                         <p>50+</p>
@@ -119,9 +112,16 @@
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
+                                <div class="form-group col-md-3 radio-toolbar">
+                                    <label class="form-check">
+                                        <p>200+</p>
+                                        <asp:RadioButton ID="tqr200" GroupName="radio" OnCheckedChanged="tqr200_CheckedChanged" AutoPostBack="true" runat="server"></asp:RadioButton>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
                                 <%--</div>--%>
                             </div>
-                            <div class="row">
+                            <div class="row hideProp">
                                 <!--SHORT WAY-->
                                 <!--times quote : rendering-->
                                 <div class="col-md-6">
@@ -132,7 +132,7 @@
 
                                 <!--LONG WAY-->
                                 <!--vendor assigned : rendering-->
-                                <div class="col-md-6">
+                                <div class="col-md-6 hideProp">
                                     <asp:Label ID="lblVndAss" Text="Vendors Assigned" runat="server"></asp:Label>
                                     <asp:DropDownList ID="ddlVendAssign" name="sel-vndassigned" AutoPostBack="true" class="form-control" title="Both: It shows Parts with vendors assigned and without vendors assigned at the same time." ViewStateMode="enabled" runat="server"></asp:DropDownList>
                                 </div>
@@ -196,23 +196,24 @@
 
                                     <div class="form-group col-md-6 radio-toolbar">
                                         <label class="form-check">
-                                            <p>Vendor Name</p>
-                                            <asp:RadioButton ID="rdVndName" OnCheckedChanged="rdVndName_CheckedChanged" onclick="javascript:yesnoCheck('rowVndName');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-6 radio-toolbar">
-                                        <label class="form-check">
                                             <p>Major</p>
                                             <asp:RadioButton ID="rdMajor" OnCheckedChanged="rdMajor_CheckedChanged" onclick="yesnoCheck('rowMajor');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
+                                    
+                                </div>
 
-                                    <div class="form-group col-md-6 radio-toolbar">
+                                <div class="row">  
+                                    <div class="form-group col-md-6 radio-toolbar hideProp">
+                                        <label class="form-check">
+                                            <p>Vendor Name</p>
+                                            <asp:RadioButton ID="rdVndName" OnCheckedChanged="rdVndName_CheckedChanged" onclick="javascript:yesnoCheck('rowVndName');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group col-md-6 radio-toolbar hideProp">
                                         <label class="form-check">
                                             <p>Wish List</p>
                                             <asp:RadioButton ID="rdWL" OnCheckedChanged="rdWL_CheckedChanged" onclick="yesnoCheck('rowWL');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
@@ -222,7 +223,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="form-group col-md-6 radio-toolbar">
+                                    <div class="form-group col-md-6 radio-toolbar hideProp">
                                         <label class="form-check">
                                             <p>Sale Last 12</p>
                                             <asp:RadioButton ID="rdLast12" OnCheckedChanged="rdLast12_CheckedChanged" onclick="yesnoCheck('rowLast12');" class="form-check" GroupName="radiofilters" AutoPostBack="true" runat="server"></asp:RadioButton>
@@ -331,7 +332,7 @@
                                 <div class="col-md-10" style="text-align: center !important;"><span id="spnUpdatePart2">add person in charge</span></div>
                                 <div class="col-md-1"></div>
                             </div>
-                            <div class="form-row" style="padding: 25px 25px;"> 
+                            <div class="form-row" style="padding: 20px 10px 2px 10px;"> 
                                 <div class="form-group col-md-6" style="text-align: justify;font-size: 12px;padding: 15px;">
                                     <asp:Label ID="lblSelectedPart" CssClass="label-style" Text="" EnableViewState="true" ViewStateMode="Enabled" runat="server"></asp:Label>                                    
                                     <br />
@@ -345,7 +346,15 @@
                                     <asp:Label ID="lblStatus3" CssClass="label-style" Text="status" runat="server"></asp:Label>
                                     <asp:DropDownList ID="ddlStatus3" OnSelectedIndexChanged="ddlStatus3_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" EnableViewState="true" ViewStateMode="Enabled" runat="server" />
                                 </div>--%>
-                            </div>                    
+                            </div> 
+                            <div class="form-row" style="padding: 5px 1px 20px 1px;">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
+                                    <asp:CheckBox ID="chkToWS" runat="server" />
+                                    <asp:Label ID="lblToWS" Text="Do you want to  add this reference /s to the Wish list? "  runat="server"></asp:Label>
+                                </div>   
+                                <div class="col-md-2"></div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6" style="float: right; text-align: right !important;">
                                     <asp:Button ID="btnUpdate3" Text="assign" class="btn btn-primary btn-lg btnMidSize" OnClick="btnUpdate3_Click" runat="server" />
@@ -380,7 +389,7 @@
                     </div>
                     <div class="col-md-6">
                         <div id="rowBtnOpt" class="row">
-                            <div class="col-xs-12 col-sm-3"></div>
+                            <div class="col-xs-12 col-sm-4"></div>
                             <div class="col-xs-12 col-sm-2 flex-item-1 padd-fixed">
                                 <asp:Button ID="btnExcel" class="btn btn-primary btn-lg float-right btnFullSize" runat="server" Text="Excel" />
                                 <%--<asp:LinkButton class="boxed-btn-layout-2 btnFullSize" runat="server">
@@ -390,13 +399,13 @@
                                     <i class="fa fa-retweet fa-1x" aria-hidden="true"> </i> <span>RELOAD LAST SEARCH</span>
                                 </asp:LinkButton>--%>
                             </div>
-                            <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed">
+                            <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed hideProp">
                                 <asp:Button ID="btnPdf" class="btn btn-primary btn-lg btnFullSize" runat="server" Text="Pdf" />
                             </div>
                             <div class="col-xs-12 col-sm-2 flex-item-3 padd-fixed">
                                 <asp:Button ID="btnRestore" class="btn btn-primary btn-lg btnFullSize" runat="server" Text="Restore Data" />
                             </div>
-                            <div class="col-xs-12 col-sm-3"></div>
+                            <div class="col-xs-12 col-sm-4"></div>
                         </div>
                     </div>
                     <div class="col-md-3">

@@ -36,6 +36,10 @@ textarea {
     }
 }
 
+#rwAssigment {
+    display: flex !important;
+}
+
 #MainNavBar {
     float: right !important;
     padding: 20px 0 0 0;
@@ -275,6 +279,10 @@ table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
 
 .table .money, .number {
     text-align: right !important;
+}
+
+#MainContent_lblSelectedPart {
+    word-break: break-all !important;
 }
 
 /*#rowGridView th span input {
