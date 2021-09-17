@@ -477,7 +477,8 @@ Public Class CTP_SYSTEM : Implements IDisposable
                     case when WHLADDPRIC <> 0 then cast(round(WHLADDPRIC,2) as decimal(10,2)) else 0 end IMPRC                       
                     FROM qs36f.WHLADDINMJ A2 ) y left JOIN qs36f.PRDWL A3 on y.IMPTN = A3.WHLPARTN LEFT JOIN qs36f.invptyf A4 on y.IMPTN = A4.IPPART 
                     left join qs36f.dvinva A5 on y.IMPTN = A5.DVPART left join qs36f.inmsta A6 on y.IMPTN = A6.IMPTN left join qs36f.invptyf A7 on y.IMPTN = A7.IPPART
-                    left join qs36f.vnmas A8 on right('000000'||trim(A7.ipvnum),6) = A8.vmvnum where A3.WHLSTATUS <> '5' {0}
+                    left join qs36f.vnmas A8 on right('000000'||trim(A7.ipvnum),6) = A8.vmvnum where A3.WHLSTATUS <> '5' 
+                    and A3.whlpartn not in (select prdptn from qs36f.prdvld)  {0}
                     ORDER BY A3.WHLCODE ASC  "
 
         Dim resultQuery = String.Format(query, userSql)
@@ -521,6 +522,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
                     FROM qs36f.WHLADDINMJ A2 ) y left JOIN qs36f.PRDWL A3 on y.IMPTN = A3.WHLPARTN LEFT JOIN qs36f.invptyf A4 on y.IMPTN = A4.IPPART 
                     left join qs36f.dvinva A5 on y.IMPTN = A5.DVPART left join qs36f.inmsta A6 on y.IMPTN = A6.IMPTN left join qs36f.invptyf A7 on y.IMPTN = A7.IPPART
                     left join qs36f.vnmas A8 on right('000000'||trim(A7.ipvnum),6) = A8.vmvnum where A3.WHLSTATUS <> '5'
+                    and A3.whlpartn not in (select prdptn from qs36f.prdvld)
                     ORDER BY A3.WHLCODE ASC  "
         Try
             Dim dsOut = New DataSet()
@@ -822,6 +824,50 @@ Public Class CTP_SYSTEM : Implements IDisposable
         Catch ex As Exception
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
             Return affectedRows
+        End Try
+    End Function
+
+    Public Function UpdateWSHUserComment(partNo As String, comment As String) As Integer
+        Dim exMessage As String = Nothing
+        Dim Sql As String
+        Dim QueryResult As Integer = -1
+        Dim ds = New DataSet()
+        Dim affectedRows As Integer = -1
+        Try
+            Dim objDatos = New ClsRPGClientHelper()
+
+            Sql = "UPDATE qs36f.LOSTSALBCK SET commentrs = '" & comment & "' WHERE trim(IMPTN) = '" & partNo & "' "
+
+            objDatos.UpdateDataInDatabase(Sql, affectedRows)
+            'Dim affectedRows = objDatos.UpdateOdBcDataToDatabase(Sql)
+            'objDatos.InsertDataInDatabase(Sql, affectedRows)
+            Return affectedRows
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            objLog.writeLog(strLogCadenaCabecera, objLog.ErrorTypeEnum.Exception, ex.Message, ex.ToString())
+            Return QueryResult
+        End Try
+    End Function
+
+    Public Function GetWSHUserComment(partNo As String, ByRef dsResult As DataSet) As Integer
+        Dim exMessage As String = " "
+        Dim result As Integer = -1
+        Dim Sql As String
+        dsResult = New DataSet()
+        dsResult.Locale = CultureInfo.InvariantCulture
+        Try
+            Dim objDatos = New ClsRPGClientHelper()
+            Dim dt As DataTable = New DataTable()
+            Dim dsOut = New DataSet()
+            Sql = "SELECT commentrs FROM qs36f.LOSTSALBCK where imptn = '" & Trim(UCase(partNo)) & "'"
+            'result = objDatos.GetOdBcDataFromDatabase(Sql, dsResult)
+            result = objDatos.GetDataFromDatabase(Sql, dsOut, dt)
+            dsResult = dsOut
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            objLog.writeLog(strLogCadenaCabecera, objLog.ErrorTypeEnum.Exception, ex.Message, ex.ToString())
+            Return Nothing
         End Try
     End Function
 

@@ -175,6 +175,7 @@
     <Content Include="About.aspx" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="EmailTemplates\FromLostSaleAssigment.html" />
+    <Content Include="EmailTemplates\RejectReferenceWSH.html" />
     <Content Include="EmailTemplates\SendToDevConfirmation.html" />
     <Content Include="Images\avatar-ctp.PNG" />
     <Content Include="Images\mapall.PNG" />

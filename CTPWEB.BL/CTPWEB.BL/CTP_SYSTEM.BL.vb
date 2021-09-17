@@ -218,6 +218,39 @@ Public Class CTP_SYSTEM : Implements IDisposable
         End Try
     End Function
 
+    Public Function GetWSHUserComment(partNo As String, ByRef dsResult As DataSet) As Integer
+        Dim result As Integer = -1
+        Dim exMessage As String = " "
+        Try
+            Dim objDal = New DAL.CTP_SYSTEM()
+            result = objDal.GetWSHUserComment(partNo, dsResult)
+            Return result
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            Return result
+        End Try
+    End Function
+
+    Public Function UpdateWSHUserComment(partNo As String, comment As String) As Integer
+        Dim exMessage As String = Nothing
+        Dim result As Integer = -1
+        Dim sql As String = " "
+        Dim maxItem As Integer
+        Dim maxLength As Integer = 250
+        Try
+            Dim objDal = New DAL.CTP_SYSTEM()
+
+            Dim commentNew = If(String.IsNullOrEmpty(comment), comment, If(comment.Length < maxLength, comment, comment.Substring(0, Math.Min(comment.Length, maxLength))))
+
+            result = objDal.UpdateWSHUserComment(partNo, commentNew)
+            Return result
+
+        Catch ex As Exception
+            exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
+            Return result
+        End Try
+    End Function
+
     Public Function GetTotalClients(partNo As String, factor As Integer) As String
         Dim exMessage As String = Nothing
         Dim ds = New DataSet()

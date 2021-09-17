@@ -286,7 +286,7 @@ Public Class Wish_List
             dctValues.Add("OPEN", "1")
             'dctValues.Add("DOCUMENTATION", "2")
             dctValues.Add("TO DEVELOP", "3")
-            'dctValues.Add("RE-OPEN", "4")
+            dctValues.Add("ND-F", "4")
             'dctValues.Add("MOVED TO DEV", "5")
             dctValues.Add("RE-ASSIGN", "6")
 
@@ -1091,9 +1091,24 @@ Public Class Wish_List
                     methodMessage = "Please select the items that you want to update and then click this button!"
                     SendMessage(methodMessage, messageType.warning)
                 Else
+
+                    If lstReferences.Count = 1 Then
+                        Dim dss As DataSet = New DataSet()
+                        Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
+
+                            Dim rsGet = objBL.GetWSHUserComment(lstReferences.Keys(0), dss)
+                            If dss IsNot Nothing Then
+                                If dss.Tables(0).Rows.Count > 0 Then
+                                    txtReason.Text = dss.Tables(0).Rows(0).Item("commentrs").ToString()
+                                End If
+                            End If
+                        End Using
+                    End If
+
                     hdUpdateMedRefFlag.Value = "1"
                     ddlStatus3.SelectedIndex = 0
                     ddlUser2.SelectedIndex = 0
+
                 End If
             End If
 
@@ -1152,6 +1167,8 @@ Public Class Wish_List
         Dim updatedReferences As Integer = 0
         Dim methodMessage As String = String.Empty
         Dim lstReferences As Dictionary(Of String, String) = New Dictionary(Of String, String)()
+        Dim emailSent As Boolean = False
+        Dim managerUser As String = ConfigurationManager.AppSettings("purcNotificatedMng").ToString()
         Try
 
             lstReferences = GetCheckboxesDisp()
@@ -1168,6 +1185,8 @@ Public Class Wish_List
                     Dim statusText As String = ddlStatus3.SelectedItem.Text
                     Dim statusValue As String = ddlStatus3.SelectedItem.Value
                     Dim code As String = selCheckbox.Value.ToString()
+                    Dim partNo As String = Nothing
+                    Dim result As Integer = -1
 
                     For Each grv As GridViewRow In grvWishList.Rows
                         Dim chk = DirectCast(grv.FindControl("chkSingleAdd"), CheckBox)
@@ -1176,10 +1195,15 @@ Public Class Wish_List
                             grv.Cells(8).Text = userText
 
                             Dim lbl1 = DirectCast(grv.FindControl("lbPartNo"), LinkButton)
-                            Dim partNo = If(lbl1 IsNot Nothing, Trim(lbl1.CommandArgument.ToString()), "")
+                            partNo = If(lbl1 IsNot Nothing, Trim(lbl1.CommandArgument.ToString()), "")
 
                             Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
-                                Dim result = objBL.UpdateWishListGenericReference(userText, statusValue, grv.Cells(2).Text, partNo)
+                                If LCase(managerUser.Trim().Equals(LCase(Session("userid").ToString().Trim()))) Then
+                                    result = objBL.UpdateWishListGenericReference(userText.ToUpper(), statusValue, grv.Cells(2).Text, partNo)
+                                Else
+                                    result = objBL.UpdateWishListGenericReference(managerUser.ToUpper(), statusValue, grv.Cells(2).Text, partNo)
+                                End If
+
                                 If result > 0 Then
                                     grvWishList.UpdateRow(grv.RowIndex, False)
                                     updatedReferences += 1
@@ -1188,6 +1212,37 @@ Public Class Wish_List
 
                         End If
                     Next
+
+
+                    If Not String.IsNullOrEmpty(txtReason.Text) Then
+                        'save reason for this part number and user assign with the assign date and current date
+                        'send email to manager
+                        Dim exmess As String = Nothing
+                        Try
+                            Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
+
+                                For Each item In lstReferences
+                                    Dim rsUpdate = objBL.UpdateWSHUserComment(item.Key.Trim(), txtReason.Text.Trim())
+                                    If rsUpdate <= 0 Then
+                                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "The update proccesss for the part " + item.Key.Trim() + " do not affect any row. Proccess requested by " + Session("userid").ToString(), "Login at time: " + DateTime.Now.ToString())
+                                    Else
+                                        PrepareEmailReassign(userText, partNo, emailSent, exmess)
+                                        If Not emailSent Then
+                                            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Trace, "Wish List Notification Email Trace Log. Part Reported: " + item.Key.ToUpper() + ". User assigned: " + item.Value +
+                                                     ". The email could not be send . Running by user: " + Session("userid").ToString(), "Login at time: " + DateTime.Now.ToString())
+                                        End If
+                                    End If
+                                Next
+                                'Dim rsUpdate = objBL.UpdateWSHUserComment("",)
+
+                            End Using
+
+                        Catch ex As Exception
+                            exmess = ex.Message
+                        End Try
+                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "Exception generated when try to send email: " + exmess + ".", "Login at time: " + DateTime.Now.ToString())
+
+                    End If
 
                     'ya funciono. Queda cerra cuando actualiza y que funcione el botonback
                     If updatedReferences > 0 Then
@@ -1896,7 +1951,7 @@ Public Class Wish_List
                     e.Row.Cells(7).ForeColor = System.Drawing.Color.Orange
                 ElseIf LCase(e.Row.Cells(7).Text) = "documentation" Then
                     e.Row.Cells(7).ForeColor = System.Drawing.Color.Blue
-                ElseIf LCase(e.Row.Cells(7).Text) = "rejected" Then
+                ElseIf LCase(e.Row.Cells(7).Text) = "re-assigned" Then
                     e.Row.Cells(7).ForeColor = System.Drawing.Color.Red
                 Else
                     e.Row.Cells(7).ForeColor = System.Drawing.Color.Green
@@ -2289,7 +2344,7 @@ Public Class Wish_List
 
 #Region "Generics"
 
-    Public Function GetUserEmailByUserId(userid As String) As String
+    Public Function GetUserEmailByUserId(userid As String, Optional ByRef username As String = Nothing) As String
         Dim strLdap = "costex.com"
         Dim userEmail As String = Nothing
         Try
@@ -2297,6 +2352,7 @@ Public Class Wish_List
                 Dim yourUser As UserPrincipal = UserPrincipal.FindByIdentity(pc, userid)
                 If yourUser IsNot Nothing Then
                     userEmail = yourUser.EmailAddress.Trim().ToLower()
+                    username = yourUser.Name.ToString()
                 End If
             End Using
             Return userEmail
@@ -2304,6 +2360,73 @@ Public Class Wish_List
             Return userEmail
         End Try
     End Function
+
+    Public Sub PrepareEmailReassign(userSelected As String, partNo As String, ByRef emailSent As Boolean, Optional exMessage As String = Nothing)
+        emailSent = True
+        exMessage = Nothing
+        Try
+            Dim emailSender As String = ConfigurationManager.AppSettings("username").ToString()
+            Dim emailSenderPassword As String = ConfigurationManager.AppSettings("password").ToString()
+            Dim emailSenderHost As String = ConfigurationManager.AppSettings("smtp").ToString()
+            Dim emailSenderPort As String = ConfigurationManager.AppSettings("portnumber").ToString()
+            Dim managerUser As String = ConfigurationManager.AppSettings("purcNotificatedMng").ToString()
+            'Dim emailIsSSL As Boolean = CBool(ConfigurationManager.AppSettings("IsSSL").ToString())
+
+            Dim FileTemplate = Directory.GetFiles(Server.MapPath("~/EmailTemplates/"))
+            Dim pathToProccess As String = Nothing
+            For Each item As String In FileTemplate
+                If LCase(item).Contains("wsh") Then
+                    pathToProccess = item
+                    Exit For
+                End If
+            Next
+            Dim str = New StreamReader(pathToProccess)
+            Dim Mailtext = str.ReadToEnd()
+            str.Close()
+
+            Dim msg As MailMessage = New MailMessage()
+            msg.IsBodyHtml = True
+            msg.From = New MailAddress(emailSender)
+
+            Dim lstRec = PrepareRecipients()
+
+            For Each lsEmail As String In lstRec
+                msg.To.Add(lsEmail)
+            Next
+
+            Dim username As String = Nothing
+            Dim userEmail = If(Not String.IsNullOrEmpty(managerUser), GetUserEmailByUserId(managerUser.Trim(), username), lstRec(0))
+            'assign to recipients the person assigned
+
+            Mailtext = Mailtext.Replace("[partno]", partNo)
+            Mailtext = Mailtext.Replace("[userselected]", userSelected)
+            Mailtext = Mailtext.Replace("[reason]", "Check from where we can get the data.")
+
+            If Not String.IsNullOrEmpty(userEmail.Trim()) Then
+                Mailtext = Mailtext.Replace("[user]", "aavila@costex.com")
+                'Mailtext = Mailtext.Replace("[user]", userEmail)
+                Mailtext = Mailtext.Replace("[username]", username)
+                'msg.To.Add(userEmail)
+                msg.To.Add("aavila@costex.com")
+            End If
+
+            msg.Subject = "Purchasing Notification."
+            msg.Body = Mailtext
+
+            Dim _smtp As SmtpClient = New SmtpClient()
+            _smtp.Host = emailSenderHost
+            _smtp.Port = emailSenderPort
+
+            Dim _newtwork As NetworkCredential = New NetworkCredential(emailSender, emailSenderPassword)
+            _smtp.Credentials = _newtwork
+
+            _smtp.Send(msg)
+
+        Catch ex As Exception
+            exMessage = ex.Message
+            emailSent = False
+        End Try
+    End Sub
 
     Public Sub PrepareEmail(ByRef emailSent As Boolean, flag As String, Optional projectNoOut As String = Nothing, Optional vendorNoOut As String = Nothing)
         emailSent = True

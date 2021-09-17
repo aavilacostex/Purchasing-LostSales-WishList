@@ -878,6 +878,24 @@ Partial Public Class Wish_List
     Protected WithEvents ddlStatus3 As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
+    '''lblReason control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblReason As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''txtReason control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtReason As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
     '''btnUpdate3 control.
     '''</summary>
     '''<remarks>
@@ -2118,6 +2136,15 @@ Partial Public Class Wish_List
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents hdWelcomeMess As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''hdGetSelectedStatus control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hdGetSelectedStatus As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''ddlStatusFoot control.

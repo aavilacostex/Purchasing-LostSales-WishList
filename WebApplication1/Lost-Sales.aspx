@@ -121,7 +121,7 @@
                                 </div>
                                 <%--</div>--%>
                             </div>
-                            <div class="row">
+                            <div class="row hideProp">
                                 <!--SHORT WAY-->
                                 <!--times quote : rendering-->
                                 <div class="col-md-6">

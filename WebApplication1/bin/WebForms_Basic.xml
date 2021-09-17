@@ -4393,6 +4393,24 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
+<member name="F:WebApplication1.Wish_List._lblReason">
+<summary>
+lblReason control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._txtReason">
+<summary>
+txtReason control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
 <member name="F:WebApplication1.Wish_List._btnUpdate3">
 <summary>
 btnUpdate3 control.
@@ -5629,6 +5647,15 @@ To modify move field declaration from designer file to code-behind file.
 <member name="F:WebApplication1.Wish_List._hdWelcomeMess">
 <summary>
 hdWelcomeMess control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:WebApplication1.Wish_List._hdGetSelectedStatus">
+<summary>
+hdGetSelectedStatus control.
 </summary>
 <remarks>
 Auto-generated field.

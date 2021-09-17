@@ -593,7 +593,13 @@
                                     <asp:Label ID="lblStatus3" CssClass="label-style" Text="status" runat="server"></asp:Label>
                                     <asp:DropDownList ID="ddlStatus3" OnSelectedIndexChanged="ddlStatus3_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" EnableViewState="true" ViewStateMode="Enabled" runat="server" />
                                 </div>
-                            </div>                    
+                            </div> 
+                            <div class="form-row" style="padding: 0 25px 10px 25px;">
+                                <div class="form-group col-md-12">
+                                    <asp:Label ID="lblReason" CssClass="label-style" Text="unaccepted reason" runat="server"></asp:Label>
+                                    <asp:TextBox ID="txtReason" Enabled="false" CssClass="form-control fullTextBox" TextMode="MultiLine" runat="server"></asp:TextBox>
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6" style="float: right; text-align: right !important;">
                                     <asp:Button ID="btnUpdate3" Text="update" class="btn btn-primary btn-lg btnMidSize" OnClick="btnUpdate3_Click" runat="server" />
@@ -1050,6 +1056,7 @@
                 <asp:HiddenField ID="hdDifVnd" value="" runat="server" />
 
                 <asp:HiddenField id="hdWelcomeMess" Value="" runat="server" />
+                <asp:HiddenField id="hdGetSelectedStatus" Value="" runat="server" />
             </div>
 
             <div class="row" style="display: none !important;">
@@ -1269,6 +1276,20 @@
                 divId.className = "collapse"
             }
         }
+
+        $('body').on('change', "#<%=ddlStatus3.ClientID %>", function () {
+            debugger
+
+            var value = document.getElementById("<%=ddlStatus3.ClientID %>");
+            var gettext = value.options[value.selectedIndex].text;
+            var getindex = value.options[value.selectedIndex].value;
+
+            $('#<%=hdGetSelectedStatus.ClientID %>').val(getindex);
+
+            var value1 = document.getElementById("<%=ddlUser2.ClientID %>").id;
+            //$('#<%=hdGetSelectedStatus.ClientID %>').val(value1);
+
+        });
 
         //$('body').on('click', '#accordion_2 h5 a', function () {
         //    //debugger
@@ -1621,8 +1642,10 @@
 
             var hdFile = document.getElementById('<%=hdUpdateMedRefFlag.ClientID%>').value
             if (hdFile == "1") {
-                $('#<%=hdUpdateMedRefFlag.ClientID %>').val("0")
-                $('#<%=hdProdDevFlag.ClientID %>').val("0")
+                $('#<%=hdUpdateMedRefFlag.ClientID %>').val("0");
+                $('#<%=hdProdDevFlag.ClientID %>').val("0");
+
+                $("#MainContent_txtReason").val("");
             }
         });
         
@@ -2391,6 +2414,16 @@
             fillPartInfo();
 
             fixFooterColumns();
+
+
+            var hdSelSts = document.getElementById('<%=hdGetSelectedStatus.ClientID%>').value
+            if (hdSelSts == "6") {
+                debugger
+
+                $("#MainContent_txtReason").attr("disabled", false);
+                $("#MainContent_txtReason").prop("disabled", false);
+            }
+            
             //$('.footer-style').children("td:contains(' ')").addClass('hidecol');
 
             //var collapse1 = document.getElementById('collapseOne');
