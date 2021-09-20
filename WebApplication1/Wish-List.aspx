@@ -83,7 +83,7 @@
                         <asp:Panel ID="pnDefValues" CssClass="pnFilterStyles" GroupingText="ACTIONS" runat="server">
                             <div id="rowBtnFilters" class="row make-it-flex">
                                 <div class="col-xs-12 col-sm-6 flex-item-1 padd-fixed" style="float: right;">
-                                    <asp:LinkButton ID="btnWlTemplate" class="btn btn-primary btn-lg float-right btnFullSize" runat="server">
+                                    <asp:LinkButton ID="btnWlTemplate" class="btn btn-primary btn-lg float-right btnFullSize disableCtr" runat="server">
                                                             <i class="fa fa-1x fa-gear download" aria-hidden="true"> </i> WL TEMPLATE
                                     </asp:LinkButton>
                                 </div>
@@ -963,7 +963,7 @@
                     <div class="col-md-6">
                         <div id="rowBtnOpt" class="row">
                             <div class="col-xs-12 col-sm-3"></div>
-                            <div class="col-xs-12 col-sm-2 flex-item-1 padd-fixed">
+                            <div class="col-xs-12 col-sm-2 flex-item-1 padd-fixed last hideProp"> 
                                 <asp:Button ID="btnExcel" class="btn btn-primary btn-lg float-right btnFullSize" OnClick="btnExcel_Click" runat="server" Text="Excel" />
                             </div>
                             <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed hideProp">
@@ -1874,7 +1874,7 @@
 
         $('body').on('change', "#<%=rdNewProject.ClientID %>", function () {  
 
-            $('#<%=hdExistProj.ClientID %>').val("0")
+            $('#<%=hdExistProj.ClientID %>').val("2")
             $('#<%=hdNewProj.ClientID %>').val("1")           
             
         });
@@ -1882,7 +1882,7 @@
         $('body').on('change', "#<%=rdExistingProject.ClientID %>", function () {
 
             $('#<%=hdExistProj.ClientID %>').val("1")
-            $('#<%=hdNewProj.ClientID %>').val("0")   
+            $('#<%=hdNewProj.ClientID %>').val("2")   
             
         });
 

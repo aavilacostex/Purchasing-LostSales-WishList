@@ -47,6 +47,9 @@ Public Class Wish_List
 
             If Not IsPostBack() Then
 
+                'test
+                'Session("userid") = "LREDONDO"
+
                 Dim flag = GetAccessByUsers(sel, fullData)
                 If Not flag Then
                     If sel = 0 Then
@@ -1084,7 +1087,7 @@ Public Class Wish_List
 
             lstReferences = GetCheckboxesDisp()
             If lstReferences Is Nothing Then
-                methodMessage = "An exception occur in the method execution!"
+                methodMessage = "An exception occurred in the method execution!"
                 SendMessage(methodMessage, messageType.Error)
             Else
                 If lstReferences.Count = 0 Then
@@ -1093,16 +1096,16 @@ Public Class Wish_List
                 Else
 
                     If lstReferences.Count = 1 Then
-                        Dim dss As DataSet = New DataSet()
-                        Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
+                        'Dim dss As DataSet = New DataSet()
+                        'Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
 
-                            Dim rsGet = objBL.GetWSHUserComment(lstReferences.Keys(0), dss)
-                            If dss IsNot Nothing Then
-                                If dss.Tables(0).Rows.Count > 0 Then
-                                    txtReason.Text = dss.Tables(0).Rows(0).Item("commentrs").ToString()
-                                End If
-                            End If
-                        End Using
+                        '    Dim rsGet = objBL.GetWSHUserComment(lstReferences.Keys(0), dss)
+                        '    If dss IsNot Nothing Then
+                        '        If dss.Tables(0).Rows.Count > 0 Then
+                        '            txtReason.Text = dss.Tables(0).Rows(0).Item("commentrs").ToString()
+                        '        End If
+                        '    End If
+                        'End Using
                     End If
 
                     hdUpdateMedRefFlag.Value = "1"
@@ -1715,8 +1718,14 @@ Public Class Wish_List
         Try
             If searchstring.Equals("Search...") Or String.IsNullOrEmpty(searchstring) Then
 
-                Dim ds = DirectCast(Session("WishListBck"), DataSet)
-                loadData(ds)
+                Dim userFlag = DirectCast(Session("NoPrivilegesUser"), String)
+                If Not String.IsNullOrEmpty(userFlag) Then
+                    'Dim ds = DirectCast(Session("WishListData"), DataSet)
+                    loadData()
+                Else
+                    Dim ds = DirectCast(Session("WishListBck"), DataSet)
+                    loadData(ds)
+                End If
 
                 methodMessage = "When search without a search criteria the full data is loaded."
                 SendMessage(methodMessage, messageType.warning)
@@ -1770,17 +1779,31 @@ Public Class Wish_List
                         End If
                     End If
                 Else
+
+                    'Dim customUser = UCase(Session("userid").ToString().Trim())
+
+                    'Dim strOptionalQuery As String = " and a3.whlstatusu = '{0}' "
+                    'Dim sqlResult As String = String.Format(strOptionalQuery, customUser)
+
+                    'Dim ds As DataSet = New DataSet()
+
+                    'GetWishListData(0, ds, Nothing, sqlResult)
+                    'Session("WishListData") = ds
+
+                    grvWishList.DataSource = Nothing
+                    grvWishList.DataBind()
+
                     'restore grid and message 
-                    Dim dsLoad = DirectCast(Session("LostSaleBck"), DataSet)
-                    If dsLoad IsNot Nothing Then
-                        If dsLoad.Tables(0).Rows.Count > 0 Then
-                            GetWishListData(0, Nothing, dsLoad)
-                        Else
-                            GetWishListData(0, dsWork)
-                        End If
-                    Else
-                        GetWishListData(0, dsWork)
-                    End If
+                    'Dim dsLoad = DirectCast(Session("LostSaleBck"), DataSet)
+                    'If dsLoad IsNot Nothing Then
+                    '    If dsLoad.Tables(0).Rows.Count > 0 Then
+                    '        GetWishListData(0, Nothing, Nothing)
+                    '    Else
+                    '        GetWishListData(0, dsWork)
+                    '    End If
+                    'Else
+                    '    GetWishListData(0, dsWork)
+                    'End If
                 End If
 
             End If
@@ -1896,7 +1919,7 @@ Public Class Wish_List
 
                 hdWhlCode1.Value = row.Cells(2).Text
 
-                Dim assigned As String = Trim(row.Cells(8).Text)
+                Dim assigned As String = row.Cells(8).Text.Trim()
                 ddlAssignedTo.SelectedIndex = ddlAssignedTo.Items.IndexOf(ddlAssignedTo.Items.FindByText(assigned))
 
                 Dim status As String = row.Cells(7).Text
@@ -2560,6 +2583,7 @@ Public Class Wish_List
 
         Try
             Dim validUsers = ConfigurationManager.AppSettings("validUsersForWeb")
+            Dim ExcpUser = ConfigurationManager.AppSettings("ExceptionUser")
 
             user = If(Session("userid") IsNot Nothing, UCase(Session("userid").ToString().Trim()), "NA")
             If Not user.Equals("NA") Then
@@ -2581,6 +2605,13 @@ Public Class Wish_List
                             End If
                         Next
 
+                        If String.IsNullOrEmpty(authUser) Then
+                            If Not String.IsNullOrEmpty(ExcpUser) Then
+                                authUser = ExcpUser
+                                fullData = True
+                            End If
+                        End If
+
                         If Not String.IsNullOrEmpty(authUser) Then
                             'fullData = If(LCase(validUsers.Trim()).Contains(LCase(authUser.Trim())), True, False)
 
@@ -2588,6 +2619,7 @@ Public Class Wish_List
                                 sel = 0
                                 flag = False
                             Else
+                                fullData = False
                                 flag = True
                             End If
                             'fullData = False 'test remove
@@ -3315,6 +3347,7 @@ Public Class Wish_List
         Dim exMessage As String = Nothing
         dsResult = New DataSet()
         Dim result As Integer = -1
+        Dim dsAux As DataSet = New DataSet()
 
         Try
             Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
@@ -3359,8 +3392,20 @@ Public Class Wish_List
 
                                     Session("flagBck") = "1"
                                 End If
+                            Else
+                                Session("WishListData") = Nothing
+                                grvWishList.DataSource = Nothing
+                                grvWishList.DataBind()
                             End If
+                        Else
+                            Session("WishListData") = Nothing
+                            grvWishList.DataSource = Nothing
+                            grvWishList.DataBind()
                         End If
+                    Else
+                        Session("WishListData") = Nothing
+                        grvWishList.DataSource = Nothing
+                        grvWishList.DataBind()
                     End If
                 End If
             End Using
@@ -3996,14 +4041,42 @@ Public Class Wish_List
                     Dim ds = objBL.GetCodeAndNameByPartNo(txtPartNoPD.Text)
 
                     'test remove
-                    ds = Nothing
+                    'ds = Nothing
                     'test remove
 
+                    Dim bContinue As Boolean = False
                     If ds IsNot Nothing Then
+                        'existe la parte en un proyecto
+                        bContinue = True
+                    End If
+
+                    If bContinue Then
+
                         Dim mixProject = objBL.GetCodeAndNameByPartNoAndVendorNo(partNo, vendorNo)
-                        flag = If(mixProject IsNot Nothing, 2, 1)
+
+                        If mixProject IsNot Nothing Then
+                            If mixProject.Tables(0).Rows.Count > 0 Then
+                                'existe la parte y el vendor en un proyecto
+                                flag = 2
+                            Else
+                                'no existe la parte y el vendor en ningun proyecto
+                                flag = 1
+                            End If
+                        End If
+
+                        If flag.Equals(2) Then
+                            flagResult = False
+                            Dim message = "There is already a project with the part number and vendor number assigned."
+                            SendMessage(message, messageType.warning)
+                            Exit Sub
+                        End If
+
+                        'flag = If(mixProject IsNot Nothing, 2, 1)
                         'mensaje en relacion a lo que tega flag, 1)o solo existe la parte o 2)existe la parte para el mismo vendor seleccionado
-                    Else
+
+                    End If
+
+                    If flag.Equals(1) Then
 
                         If vendorNo <> "000000" Then
 
@@ -4265,8 +4338,12 @@ Public Class Wish_List
                 'here continue the save process
                 If hdNewProj.Value = "1" Then
                     SaveNewProject(flagResult, projectNoOut, vendorNoOut)
-                Else
+                ElseIf hdExistProj.Value = "1" Then
                     SaveExistingProject(flagResult)
+                Else
+                    flagResult = False
+                    SendMessage("Please select a project option in order to add the reference.", messageType.warning)
+                    Exit Sub
                 End If
 
                 If flagResult = True Then
@@ -4286,7 +4363,9 @@ Public Class Wish_List
                         'ClearInputCustom(dvNewProject)
                     End If
 
-                    loadData()
+                    Dim dsDD = DirectCast(Session("WishListData"), DataSet)
+
+                    loadData(dsDD)
 
                 Else
                     Exit Sub

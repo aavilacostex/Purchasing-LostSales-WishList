@@ -1433,6 +1433,11 @@ input[type="color"]:focus,
     max-width: 100%;
 }
 
+.disableCtr {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
 
 /* File Upload Styles */
 input[type=file], input[type=file] + input {

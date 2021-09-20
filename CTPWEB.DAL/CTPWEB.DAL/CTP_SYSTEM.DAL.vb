@@ -1102,7 +1102,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
             Dim objDatos = New ClsRPGClientHelper()
             Dim dt As DataTable = New DataTable()
             Dim dsOut = New DataSet()
-            Sql = "SELECT PRDVLH.PRHCOD,PRDVLH.PRNAME,PRDVLD.VMVNUM FROM qs36f.PRDVLH INNER JOIN qs36f.PRDVLD ON PRDVLH.PRHCOD = PRDVLD.PRHCOD WHERE TRIM(PRDPTN) = '" & Trim(UCase(partNo)) & "' ORDER BY PRDVLD.CRDATE DESC"
+            Sql = "SELECT A1.PRHCOD,A1.PRNAME,A2.VMVNUM FROM qs36f.PRDVLH A1 INNER JOIN qs36f.PRDVLD A2 ON A1.PRHCOD = A2.PRHCOD WHERE TRIM(A2.PRDPTN) = '" & Trim(UCase(partNo)) & "' ORDER BY A2.CRDATE DESC"
             affectedRows = objDatos.GetDataFromDatabase(Sql, dsOut, dt)
             'result = objDatos.GetOdBcDataFromDatabase(Sql, ds)
             Return dsOut
@@ -1146,7 +1146,7 @@ Public Class CTP_SYSTEM : Implements IDisposable
             Dim objDatos = New ClsRPGClientHelper()
             Dim dt As DataTable = New DataTable()
             Dim dsOut = New DataSet()
-            Sql = "SELECT PRDVLH.PRHCOD,PRDVLH.PRNAME,PRDVLD.VMVNUM FROM qs36f.PRDVLH INNER JOIN qs36f.PRDVLD ON PRDVLH.PRHCOD = PRDVLD.PRHCOD where TRIM(PRDPTN) = '" & Trim(UCase(partNo)) & "' and vmvnum = " & Trim(vendorNo) & " ORDER BY PRDVLD.CRDATE DESC"
+            Sql = "SELECT A1.PRHCOD,A1.PRNAME,A2.VMVNUM FROM qs36f.PRDVLH A1 INNER JOIN qs36f.PRDVLD A2 ON A1.PRHCOD = A2.PRHCOD where TRIM(A2.PRDPTN) = '" & Trim(UCase(partNo)) & "' and A2.vmvnum = " & Trim(vendorNo) & " ORDER BY A2.CRDATE DESC"
             affectedRows = objDatos.GetDataFromDatabase(Sql, dsOut, dt)
             'result = objDatos.GetOdBcDataFromDatabase(Sql, ds)
             Return dsOut

@@ -10,6 +10,8 @@ Public Class _Default
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         Dim url As String = Nothing
+        Dim flagRedirect As Boolean = False
+        Dim ExcpUser = ConfigurationManager.AppSettings("ExceptionUser")
         Try
             If Session("userid") Is Nothing Then
                 url = String.Format("Login.aspx?data={0}", "Session Expired!")
@@ -31,9 +33,16 @@ Public Class _Default
                         For Each dw As DataRow In ds.Tables(0).Rows
                             If dw.Item("USUSER").ToString().Trim().ToUpper() = user.Trim().ToUpper() Then
                                 'Or user = "AAVILA"
+                                flagRedirect = True
                                 Response.Redirect("Wish-List.aspx", False)
                             End If
                         Next
+                    End If
+
+                    If Not flagRedirect Then
+                        If Not String.IsNullOrEmpty(ExcpUser) Then
+                            Response.Redirect("Wish-List.aspx", False)
+                        End If
                     End If
 
                 End If

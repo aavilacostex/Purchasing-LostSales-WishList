@@ -111,6 +111,11 @@ C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\WebApplication1\obj\Debug\CTPWEB.v
 C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\WebApplication1\obj\Debug\WebApplication1.dll
 C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\WebApplication1\obj\Debug\WebForms_Basic.xml
 C:\Users\aavila\source\repos\WEB_CTPSYSTEM1.2\WebApplication1\obj\Debug\WebApplication1.pdb
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Collections.Immutable.dll
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\vbc.exe
+C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\BouncyCastle.Crypto.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\WebApplication1.dll.config
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\WebApplication1.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\WebApplication1.pdb
@@ -124,9 +129,7 @@ C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSale
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
-C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
-C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.CSharp.Core.targets
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
@@ -134,7 +137,6 @@ C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSale
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.VisualBasic.Core.targets
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\Microsoft.Win32.Primitives.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.AppContext.dll
-C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Collections.Immutable.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Console.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
@@ -159,7 +161,6 @@ C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSale
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Xml.XmlDocument.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Xml.XPath.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\System.Xml.XPath.XDocument.dll
-C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\vbc.exe
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\vbc.exe.config
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\vbc.rsp
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\roslyn\VBCSCompiler.exe
@@ -168,7 +169,6 @@ C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSale
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\Antlr3.Runtime.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\AspNet.ScriptManager.bootstrap.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\AspNet.ScriptManager.jQuery.dll
-C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\BouncyCastle.Crypto.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\ClosedXML.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\CTPWEB.BL.dll
 C:\GitServer\ProductionProjects\PurchasingLostSales-WishList\Purchasing-LostSales-WishList\WebApplication1\bin\CTPWEB.DTO.dll
