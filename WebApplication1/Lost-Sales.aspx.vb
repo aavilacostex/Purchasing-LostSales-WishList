@@ -254,6 +254,11 @@ Public Class Lost_Sales
             Dim emailSenderPort As String = ConfigurationManager.AppSettings("portnumber").ToString()
             'Dim emailIsSSL As Boolean = CBool(ConfigurationManager.AppSettings("IsSSL").ToString())
 
+            Dim managerUser As String = ConfigurationManager.AppSettings("purcNotificatedMng").ToString()
+            Dim flagEmail As String = ConfigurationManager.AppSettings("flagEmail").ToString()
+            Dim ProdNotUsers = ConfigurationManager.AppSettings("purcNotificatedUsers").ToString()
+            Dim TestNotUsers = ConfigurationManager.AppSettings("purcNotificatedUsersTest").ToString()
+
             Dim FileTemplate = Directory.GetFiles(Server.MapPath("~/EmailTemplates/"))
             Dim pathToProccess As String = Nothing
             For Each item As String In FileTemplate
@@ -266,7 +271,6 @@ Public Class Lost_Sales
             Dim Mailtext = str.ReadToEnd()
             str.Close()
 
-            Mailtext = Mailtext.Replace("[user]", "aavila@costex.com")
             Mailtext = Mailtext.Replace("[partno]", partNo)
             Mailtext = Mailtext.Replace("[userselected]", userSelected)
 
@@ -281,16 +285,27 @@ Public Class Lost_Sales
             Next
 
             Dim username As String = Nothing
-            Dim userEmail = If(Not userSelected.Contains("N/A"), GetUserEmailByUserId(userSelected.Trim(), username), "")
+            Dim username1 As String = Nothing
+            Dim userEmail = If(flagEmail.Equals("1"), If(Not String.IsNullOrEmpty(managerUser), GetUserEmailByUserId(managerUser.Trim(), username), lstRec(0)), GetUserEmailByUserId(TestNotUsers.Split("@")(0).Trim(), username))
+            'Dim userEmail = If(Not userSelected.Contains("N/A"), GetUserEmailByUserId(userSelected.Trim(), username), "")
             'assign to recipients the person assigned
 
             If Not String.IsNullOrEmpty(userEmail.Trim()) Then
+                Mailtext = Mailtext.Replace("[user]", userEmail)
                 Mailtext = Mailtext.Replace("[username]", username)
-                'msg.To.Add(userEmail)
-                msg.To.Add("aavila@costex.com")
+
+                If Not userEmail.Equals(TestNotUsers) Then
+                    msg.To.Add(TestNotUsers)
+                    If flagEmail.Equals("1") Then
+                        Dim emailSelected = GetUserEmailByUserId(userSelected.Trim(), username1)
+                        If Not String.IsNullOrEmpty(emailSelected.Trim()) Then
+                            msg.To.Add(emailSelected)
+                        End If
+                    End If
+                End If
             End If
 
-            msg.Subject = "Purchasing Notification."
+            msg.Subject = "Part Assigned for Development."
             msg.Body = Mailtext
 
             Dim _smtp As SmtpClient = New SmtpClient()
