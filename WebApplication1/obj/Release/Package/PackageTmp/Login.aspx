@@ -11,7 +11,7 @@
                         <!-- first row -->
                         <div class="row" style="padding: 30px 0;">
                             <div class="col-md-2"></div>
-                            <div class="col-md-8 centered"><span id="spnLoadText">Welcome to the CTP System</span></div>
+                            <div class="col-md-8 centered"><span id="spnLoadText">Welcome to CostexEA</span></div>
                             <div class="col-md-2"></div>
                         </div>
                         <!-- Optinal message row -->

@@ -496,9 +496,9 @@ Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
-<member name="F:WebApplication1.Lost_Sales._btnPdf">
+<member name="F:WebApplication1.Lost_Sales._btnFullExcel">
 <summary>
-btnPdf control.
+btnFullExcel control.
 </summary>
 <remarks>
 Auto-generated field.

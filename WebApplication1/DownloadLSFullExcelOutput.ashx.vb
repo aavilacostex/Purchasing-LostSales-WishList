@@ -3,7 +3,7 @@ Imports System.Web
 Imports System.Web.Services
 Imports CTPWEB.DTO
 
-Public Class DownloadLSExcelOutput
+Public Class DownloadLSFullExcelOutput
     Implements System.Web.IHttpHandler, System.Web.SessionState.IRequiresSessionState
 
     Private Shared strLogCadenaCabecera As String = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString()
@@ -12,7 +12,6 @@ Public Class DownloadLSExcelOutput
     Dim userid As String = Nothing
 
     Sub ProcessRequest(ByVal context As HttpContext) Implements IHttpHandler.ProcessRequest
-
         Dim exMessage As String = Nothing
         Try
             Dim path = context.Session("filePathLSExcelOutput")
@@ -31,11 +30,11 @@ Public Class DownloadLSExcelOutput
 
             File.Delete(path)
             response.End()
-
         Catch ex As Exception
             exMessage = ex.ToString + ". " + ex.Message + ". " + ex.ToString
             writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "User Logged In Lost Sales Program: " + userid + ".Error: " + exMessage, "Login at time: " + DateTime.Now.ToString())
         End Try
+
     End Sub
 
     ReadOnly Property IsReusable() As Boolean Implements IHttpHandler.IsReusable

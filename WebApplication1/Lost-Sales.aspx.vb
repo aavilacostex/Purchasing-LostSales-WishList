@@ -1086,7 +1086,7 @@ Public Class Lost_Sales
                         'lblTimesQuote.Text = If(getIfCheckedQuote() = False, "100+", getStrTQouteCriteria())
                         'Session("TimesQuote") = lblTimesQuote.Text
                         Session("LostSaleData") = dsResult
-                        Session("LostSaleBck") = dsResult
+                        'Session("LostSaleBck") = dsResult
                     End If
                 End If
             End Using
@@ -2753,6 +2753,7 @@ Public Class Lost_Sales
                     grvLostSales.DataSource = ds.Tables(0)
                     grvLostSales.DataBind()
                     Session("LostSaleData") = ds
+
                 Else
                     grvLostSales.DataSource = Nothing
                     grvLostSales.DataBind()
@@ -2762,6 +2763,7 @@ Public Class Lost_Sales
                 End If
                 'updatepnl2.Update()
 
+                setDefaultValues(ds)
                 Exit Sub
             Else
                 If dt IsNot Nothing Then
@@ -2774,10 +2776,11 @@ Public Class Lost_Sales
                         Dim dss = New DataSet()
                         dss.Tables.Add(dtt)
                         Session("LostSaleData") = dss
+                        setDefaultValues(dss)
                     Else
                         grvLostSales.DataSource = Nothing
                         grvLostSales.DataBind()
-
+                        setDefaultValues()
                         methodMessage = "There is not results with the selected criteria."
                         SendMessage(methodMessage, messageType.warning)
 
@@ -2799,6 +2802,7 @@ Public Class Lost_Sales
     Private Sub getLSData(Optional ds As DataSet = Nothing, Optional qty As Integer = 0, Optional selection As String = Nothing, Optional ddlExtraSel As DropDownList = Nothing)
         Dim exMessage As String = Nothing
         Dim lstVendors As List(Of LostSales) = New List(Of LostSales)()
+        Dim lstVendorsOk As List(Of LostSales) = New List(Of LostSales)()
         Dim lstSelectedCVData As List(Of LostSales) = New List(Of LostSales)()
         Dim lstSelectedNVData As List(Of LostSales) = New List(Of LostSales)()
         Dim methodMessage As String = Nothing
@@ -2807,6 +2811,17 @@ Public Class Lost_Sales
                 lstVendors = fillObj(ds.Tables(0))
 
                 For Each obj As LostSales In lstVendors
+                    If Not obj.IMDSC.Contains("USE ") And Not obj.IMDS2.Contains("USE ") And Not obj.IMDS3.Contains("USE ") Then
+                        lstVendorsOk.Add(obj)
+                    End If
+                Next
+
+                Dim dtFullOk = ListToDataTable(lstVendorsOk)
+                Dim dsFullOk As DataSet = New DataSet()
+                dsFullOk.Tables.Add(dtFullOk)
+                Session("LostSaleBck") = dsFullOk
+
+                For Each obj As LostSales In lstVendorsOk
                     If Not String.IsNullOrEmpty(obj.VENDOR.Trim()) And obj.VENDOR.Trim() <> "000000" Then
                         lstSelectedCVData.Add(obj)
                     Else
@@ -5005,6 +5020,7 @@ Public Class Lost_Sales
         Dim fileExtension As String = ""
         Dim fileName As String = ""
         Try
+            writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "Starting the btnexcel method", "Login at time: " + DateTime.Now.ToString())
             Dim dsResult = DirectCast(Session("LostSaleData"), DataSet)
             If dsResult IsNot Nothing Then
                 If dsResult.Tables(0).Rows.Count > 0 Then
@@ -5041,8 +5057,9 @@ Public Class Lost_Sales
 
                     Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
                         fileExtension = objBL.Determine_OfficeVersion()
+                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "Starting the btnexcel method", "Login at time: " + DateTime.Now.ToString())
                         If String.IsNullOrEmpty(fileExtension) Then
-                            Exit Sub
+                            fileExtension = "xlsx"
                         End If
 
                         Dim title As String
@@ -5052,6 +5069,8 @@ Public Class Lost_Sales
                     End Using
 
                     Dim fullPath = folderPath + fileName
+
+                    writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "Getting the fullpath:" + fullPath, "Login at time: " + DateTime.Now.ToString())
 
                     Using wb As New XLWorkbook()
                         wb.Worksheets.Add(dsResult.Tables(0), "LostSale")
@@ -5072,12 +5091,13 @@ Public Class Lost_Sales
 
                     If File.Exists(fullPath) Then
 
+                        writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Information, "Exist fullpath!!", "Login at time: " + DateTime.Now.ToString())
 
                         Dim newLocalFile As FileInfo = New FileInfo(fullPath)
                         If newLocalFile.Exists Then
                             Try
                                 Session("filePathLSExcelOutput") = fullPath
-                                Response.Redirect("DownloadLSExcelOutput.ashx", True)
+                                Response.Redirect("DownloadLSExcelOutput.ashx", False)
                                 'Process.Start("explorer.exe", localFilePath)
                             Catch Win32Exception As Win32Exception
                                 Shell("explorer " & fullPath, AppWinStyle.NormalFocus)
@@ -5108,27 +5128,81 @@ Public Class Lost_Sales
         End Try
     End Sub
 
-    Protected Sub btnPdf_Click(sender As Object, e As EventArgs) Handles btnPdf.Click
+    Protected Sub btnFullExcel_Click(sender As Object, e As EventArgs) Handles btnFullExcel.Click
         Dim exMessage As String = Nothing
-        Dim methodMessage As String = String.Empty
-        Dim lstReferences As Dictionary(Of String, String) = New Dictionary(Of String, String)()
+        Dim fileExtension As String = ""
+        Dim fileName As String = ""
         Try
+            Dim dsResult = DirectCast(Session("LostSaleBck"), DataSet)
+            If dsResult IsNot Nothing Then
+                If dsResult.Tables(0).Rows.Count > 0 Then
+                    Dim pathToProcess = ConfigurationManager.AppSettings("urlLSExcelOutput")
+                    Dim folderPath = If(Not String.IsNullOrEmpty(ConfigurationManager.AppSettings("urlLSExcelOutput")), ConfigurationManager.AppSettings("urlLSExcelOutput"), "")
+                    Dim methodMessage = If(Not String.IsNullOrEmpty(folderPath), "The template document will be downloaded to your documents folder", "There is not a path defined for this document. Call an administrator!!")
 
-            'lstReferences = GetCheckboxesDisp()
-            'If lstReferences Is Nothing Then
-            '    methodMessage = "An exception occur in the method execution!"
-            '    SendMessage(methodMessage, messageType.Error)
-            'Else
-            '    If lstReferences.Count = 0 Then
-            '        methodMessage = "Please select the items that you want to update and then click this button!"
-            '        SendMessage(methodMessage, messageType.warning)
-            '    Else
-            '        Session("dctSelectedParts") = lstReferences
-            '        hdShowUserAssignment.Value = "1"
-            '        ddlUser2.SelectedIndex = 0
-            '    End If
-            'End If
+                    If Not Directory.Exists(folderPath) Then
+                        Directory.CreateDirectory(folderPath)
+                    Else
+                        Dim files = Directory.GetFiles(pathToProcess)
+                        Dim fi = Nothing
+                        If files.Length = 1 Then
+                            For Each item In files
+                                fi = item
+                                Dim isOpened = IsFileinUse(New FileInfo(fi))
+                                If Not isOpened Then
+                                    File.Delete(item)
+                                Else
+                                    SendMessage("Please close the file " & fi & " in order to proceed!", messageType.info)
+                                    Exit Sub
+                                End If
+                            Next
+                        Else
+                            'SendMessage("Please close the file " & fi & " in order to proceed!", messageType.info)
+                            'Exit Sub
+                        End If
+                    End If
 
+                    Using objBL As CTPWEB.BL.CTP_SYSTEM = New CTPWEB.BL.CTP_SYSTEM()
+                        fileExtension = objBL.Determine_OfficeVersion()
+                        If String.IsNullOrEmpty(fileExtension) Then
+                            fileExtension = "xlsx"
+                        End If
+
+                        Dim title As String
+                        title = "Lost_Sale_Full_Output_Generated_by "
+                        fileName = objBL.adjustDatetimeFormat(title, fileExtension)
+
+                    End Using
+
+                    Dim fullPath = folderPath + fileName
+
+                    Using wb As New XLWorkbook()
+                        wb.Worksheets.Add(dsResult.Tables(0), "LostSale")
+                        wb.SaveAs(fullPath)
+                    End Using
+
+                    If File.Exists(fullPath) Then
+                        Dim newLocalFile As FileInfo = New FileInfo(fullPath)
+                        If newLocalFile.Exists Then
+                            Try
+                                Session("filePathLSExcelOutput") = fullPath
+                                Response.Redirect("DownloadLSFullExcelOutput.ashx", False)
+                                'Process.Start("explorer.exe", localFilePath)
+                            Catch Win32Exception As Win32Exception
+                                Shell("explorer " & fullPath, AppWinStyle.NormalFocus)
+                            Catch ex As Exception
+                                writeLog(strLogCadenaCabecera, Logs.ErrorTypeEnum.Exception, "Error Ocurred: " + ex.Message + " for user " + Session("userid").ToString(), "Occurs at time: " + DateTime.Now.ToString())
+                            End Try
+                        End If
+                    End If
+
+                    loadData(dsResult)
+
+                End If
+            Else
+                SendMessage("The data for the full excel download is already in process! Please try again in a few minutes.", messageType.info)
+                'Exit Sub
+            End If
 
 #Region "PDF WORK"
 

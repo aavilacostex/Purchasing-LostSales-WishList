@@ -8,6 +8,7 @@
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="submit" /> 
             <asp:PostBackTrigger ControlID="btnExcel" /> 
+            <asp:PostBackTrigger ControlID="btnFullExcel" /> 
             <%--<asp:AsyncPostBackTrigger ControlID="ddlVendAssign" /> --%>           
         </Triggers>
         <ContentTemplate> 
@@ -391,7 +392,7 @@
                         <div id="rowBtnOpt" class="row">
                             <div class="col-xs-12 col-sm-4"></div>
                             <div class="col-xs-12 col-sm-2 flex-item-1 padd-fixed">
-                                <asp:Button ID="btnExcel" class="btn btn-primary btn-lg float-right btnFullSize" runat="server" Text="Excel" />
+                                <asp:Button ID="btnExcel" class="btn btn-primary btn-lg float-right btnFullSize" runat="server" Text="Current Excel" />
                                 <%--<asp:LinkButton class="boxed-btn-layout-2 btnFullSize" runat="server">
                                     <i class="fa fa-file-excel fa-1x" aria-hidden="true"> </i> <span>EXCEL</span>
                                 </asp:LinkButton>--%>
@@ -399,8 +400,8 @@
                                     <i class="fa fa-retweet fa-1x" aria-hidden="true"> </i> <span>RELOAD LAST SEARCH</span>
                                 </asp:LinkButton>--%>
                             </div>
-                            <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed hideProp">
-                                <asp:Button ID="btnPdf" class="btn btn-primary btn-lg btnFullSize" runat="server" Text="Pdf" />
+                            <div class="col-xs-12 col-sm-2 flex-item-2 padd-fixed">
+                                <asp:Button ID="btnFullExcel" class="btn btn-primary btn-lg btnFullSize" runat="server" Text="Full Excel" />
                             </div>
                             <div class="col-xs-12 col-sm-2 flex-item-3 padd-fixed">
                                 <asp:Button ID="btnRestore" class="btn btn-primary btn-lg btnFullSize" runat="server" Text="Restore Data" />
@@ -1092,11 +1093,11 @@
             alert("pepe");
         });
 
-        $('body').on('click', '#MainContent_btnPdf', function (e) {
+        //$('body').on('click', '#MainContent_btnPdf', function (e) {
 
-            messageFormSubmitted("This functionality is in testing process!", "info");
+        //    messageFormSubmitted("This functionality is in testing process!", "info");
 
-        });
+        //});
 
         function ShowAssignUser() {            
 

@@ -137,7 +137,11 @@ Public Class CTP_SYSTEM : Implements IDisposable
 
         Dim initialQuery As String = "
                                  with z as (SELECT                                                   
-                                WRKPTN,qt,t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11+t12+t13 TQ from (SELECT
+                                WRKPTN,
+                                /*coalesce(coalesce((select imdsc from qs36f.inmsta where imptn = wrkptn), (select kodesc from qs36f.komat where koptno = wrkptn)),(select catdsc from qs36f.cater where catptn = wrkptn)) WKDESC,
+                                coalesce(coalesce((select imds2 from qs36f.inmsta where imptn = wrkptn), (select kodesc from qs36f.komat where koptno = wrkptn)),(select catdsc from qs36f.cater where catptn = wrkptn)) WKDESC2, 
+                                coalesce(coalesce((select imds3 from qs36f.inmsta where imptn = wrkptn), (select kodesc from qs36f.komat where koptno = wrkptn)),(select catdsc from qs36f.cater where catptn = wrkptn)) WKDESC3,*/ 
+                                qt,t1+t2+t3+t4+t5+t6+t7+t8+t9+t10+t11+t12+t13 TQ from (SELECT
                                  WRKPTN,(WRK001+ WRK002+ WRK003+ WRK004+ WRK005+                    
                                 WRK006+WRK007+WRK008+ WRK009+ WRK010+ WRK011+ WRK012+ WRK013)       
                                 QT,CASE WRK001 WHEN 0 THEN 0 ELSE 1 END T1,CASE WRK002 WHEN 0 THEN 0
@@ -171,12 +175,12 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 (SELECT count(distinct sccuno) FROM qs36f.slsbyccm WHERE SCCUNO not in  ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH  between '{0}' and '{5}') totalclients,  
                                 (SELECT count(distinct scctry) FROM qs36f.slsbyccm WHERE SCCUNO not in ({7}) and SCPTNO = Q.imptn and (SCYEAR*100)+ SCMNTH between '{0}' and '{5}' ) totalcountries,  
                                 (select min('X')  from qs36f.poqota where pqptn=imptn and digits(pqvnd)  not in (select vndnum from qs36f.oemvend)) oempart, 
-                                coalesce((select perpech from qs36f.LOSTSALBCK LS where LS.imptn = Q.imptn and LS.EXTSTATUS = 'NEW'), '') prpech
+                                coalesce((select perpech from qs36f.LOSTSALBCK LS where LS.imptn = Q.imptn and LS.EXTSTATUS = 'NEW'), '') prpech/*,'' WKDESC, '' WKDESC2, '' WKDESC3  */                              
                                 from qs36f.inmsta Q inner join z on Q.imptn = z.wrkptn left join 
                                 (select dvpart, sum(dvonh#) onhand, sum(dvono#) onorder, max(dvprmg) vendor 
                                 from qs36f.dvinva where dvlocn in ({6}) and ((trim(dvprmg) = '' or trim(dvprmg) = '000000') and dvonh# <= 0 and dvono# <= 0) group by dvpart) x on Q.imptn = x.dvpart  
                                 inner join qs36f.invptyf on Q.imptn = qs36f.invptyf.ippart
-                                where substr(ucase(trim(imdsc)),1,3) <> 'USE' and impc1 in ('01','03')  
+                                where substr(ucase(trim(imdsc)),1,3) <> 'USE' /*and ucase(imdsc) not like 'USE %' and ucase(imds2) not like 'USE %' and ucase(imds3) not like 'USE %'*/ and impc1 in ('01','03')  
                                 and imptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')	 
                                 and imptn not in (select imptn from qs36f.inmstpat)                                  
                                 and (not REGEXP_LIKE (coalesce(x.vendor, ''),'^[0-9]{2}$') or  x.vendor in ({4}))
@@ -191,13 +195,14 @@ Public Class CTP_SYSTEM : Implements IDisposable
                                 impc2, qt tquote, coalesce(catprc,coalesce(kopric,0)) imprc, z.TQ   
                                 Timesq, '' F20, '' Foem, 0 Ncus, impc1, imcata, (select mindes from 
                                 qs36f.mincodes where mincod = W.impc2) mindsc, '' vendorname, '' pagent, 
-                                '' catdesc, '' subcatdesc, 0 totalclients, 0 totalcountries, '' oempart , '' prpech 
-                                from z left join qs36f.cater on z.wrkptn = catptn 
-                                left join qs36f.inmsta W on z.wrkptn = W.imptn    
-                                left join qs36f.komat on z.wrkptn = koptno 
+                                '' catdesc, '' subcatdesc, 0 totalclients, 0 totalcountries, '' oempart , '' prpech/*, z.WKDESC, z.WKDESC2, z.WKDESC3 */
+                                from z left join qs36f.cater on z.wrkptn = catptn /*and catdsc not like 'USE %'*/
+                                left join qs36f.inmsta W on z.wrkptn = W.imptn /*and W.imdsc not like 'USE %' and W.imds2 not like 'USE %' and W.imds3 not like 'USE %'*/   
+                                left join qs36f.komat on z.wrkptn = koptno /*and kodesc not like 'USE%' */
                                 where z.wrkptn not in (select dvpart from qs36f.dvinva where dvlocn in ({6}))
                                 and z.wrkptn not in (select puoptn from qs36f.ptnuse where puinfo = 'N' and putype = 'C')
                                 and substr(ucase(trim(imdsc)),1,3) <> 'USE'
+                                /*and z.WKDESC not like 'USE %' and z.WKDESC2 not like 'USE %' and z.WKDESC3 not like 'USE %' */     
                                 and z.wrkptn not in (select  whlpartn from qs36f.prdwl)
                                  ) {3} "
 

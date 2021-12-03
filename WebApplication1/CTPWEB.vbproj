@@ -236,6 +236,7 @@
     <Content Include="DownloadWLTemplate.ashx" />
     <Content Include="DownloadExcelOutput.ashx" />
     <Content Include="DownloadLSExcelOutput.ashx" />
+    <Content Include="DownloadLSFullExcelOutput.ashx" />
     <None Include="My Project\PublishProfiles\Release.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
@@ -363,6 +364,9 @@
     </Compile>
     <Compile Include="DownloadWLTemplate.ashx.vb">
       <DependentUpon>DownloadWLTemplate.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadLSFullExcelOutput.ashx.vb">
+      <DependentUpon>DownloadLSFullExcelOutput.ashx</DependentUpon>
     </Compile>
     <Compile Include="KeepAlive.ashx.vb">
       <DependentUpon>KeepAlive.ashx</DependentUpon>

@@ -951,7 +951,7 @@
                 </div>
             </div>              
     
-            <div id="integratedRow" class="container-fluid">
+            <div id="integratedRow" class="container-fluid last">
                 <div class="row">
                     <div class="col-md-3">
                         <div id="rowPageSize" class="row">

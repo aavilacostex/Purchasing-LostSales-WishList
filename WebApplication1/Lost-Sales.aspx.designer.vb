@@ -410,13 +410,13 @@ Partial Public Class Lost_Sales
     Protected WithEvents btnExcel As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''btnPdf control.
+    '''btnFullExcel control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnPdf As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnFullExcel As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''btnRestore control.
